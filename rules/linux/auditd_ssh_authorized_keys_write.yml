@@ -1,0 +1,25 @@
+title: SSH authorized_keys file created or modified
+id: 7cbbb7d9-d51f-4785-9e2f-03cae1d1fc20
+status: test
+description: A write to a user's ~/.ssh/authorized_keys, which grants SSH access with an attacker-controlled key.
+references:
+  - https://attack.mitre.org/techniques/T1098/004/
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.persistence
+  - attack.t1098.004
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection:
+    type: PATH
+    name|endswith: '/.ssh/authorized_keys'
+    nametype:
+      - CREATE
+      - NORMAL
+  condition: selection
+falsepositives:
+  - Configuration management (Ansible, cloud-init) deploying keys; correlate with the executing process.
+level: medium

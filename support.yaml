@@ -14,3 +14,9 @@ exclusions:
     targets: [kusto]
     kind: not-applicable
     reason: Microsoft Sentinel has no standard table for raw auditd EXECVE/PATH records; the query would have no table.
+  - rule: activity_mass_resource_deletion
+    targets: [lucene, kusto, elasticsearch]
+    kind: unsupported
+    reason: >-
+      Sigma correlation rules are not supported by the pySigma lucene and kusto backends (sigma-cli 3.1.0); the
+      Elasticsearch engine runs Lucene conversions, so it cannot evaluate this rule. Splunk, ES|QL and Zircolite do.

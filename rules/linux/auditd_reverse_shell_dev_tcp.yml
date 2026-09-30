@@ -1,0 +1,30 @@
+title: Reverse shell through /dev/tcp or /dev/udp
+id: 507cd01b-fb21-459a-8c13-fbb1d1770be1
+status: test
+description: >-
+  A command line that redirects a shell to the bash /dev/tcp or /dev/udp pseudo-devices, the classic one-line
+  reverse shell.
+references:
+  - https://attack.mitre.org/techniques/T1059/004/
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.execution
+  - attack.t1059.004
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_type:
+    type: EXECVE
+  selection_arg:
+    - a1|contains:
+        - '/dev/tcp/'
+        - '/dev/udp/'
+    - a2|contains:
+        - '/dev/tcp/'
+        - '/dev/udp/'
+  condition: all of selection_*
+falsepositives:
+  - Health-check scripts that probe ports with bash /dev/tcp; allow-list them by exact command line.
+level: high

@@ -1,0 +1,1 @@
+{"type": "SYSCALL", "msg": "audit(1790762400.123:4242):", "TestEventId": "neg-syscall", "a2": "/dev/tcp/203.0.113.7/4444"}

@@ -1,0 +1,29 @@
+title: Owner or User Access Administrator role assigned
+id: f5fb6150-0c00-488a-a228-c81cf3e01b54
+status: test
+description: >-
+  A successful Azure RBAC assignment of Owner or User Access Administrator. In a PIM-eligible design, standing
+  assignments of these roles should not happen. Re-expression of Lab 05's privileged-role-assignment detection.
+references:
+  - https://attack.mitre.org/techniques/T1098/
+  - https://learn.microsoft.com/azure/role-based-access-control/built-in-roles
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.privilege-escalation
+  - attack.persistence
+  - attack.t1098
+logsource:
+  product: azure
+  service: activitylogs
+detection:
+  selection:
+    operationName: MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE
+    status: Success
+    requestBody|contains:
+      - 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+      - 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+  condition: selection
+falsepositives:
+  - Break-glass procedures and subscription bootstrap; both should be ticketed and short-lived.
+level: high

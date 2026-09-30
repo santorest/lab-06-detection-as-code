@@ -1,0 +1,49 @@
+# Maps this repo's flat Azure field names to Microsoft Sentinel tables/columns for the kusto backend.
+# Use together with the built-in azure_monitor pipeline: sigma convert -t kusto -p azure_monitor -p pipelines/azure_sentinel.yml
+name: Lab 06 Azure log sources to Sentinel tables
+priority: 5
+transformations:
+  - id: activitylogs_table
+    type: set_state
+    key: query_table
+    val: AzureActivity
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: activitylogs
+  - id: activitylogs_fields
+    type: field_name_mapping
+    mapping:
+      operationName: OperationNameValue
+      status: ActivityStatusValue
+      caller: Caller
+      requestBody: Properties
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: activitylogs
+  - id: auditlogs_table
+    type: set_state
+    key: query_table
+    val: AuditLogs
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: auditlogs
+  - id: auditlogs_fields
+    type: field_name_mapping
+    mapping:
+      activityDisplayName: OperationName
+      result: Result
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: auditlogs
+  - id: signinlogs_table
+    type: set_state
+    key: query_table
+    val: SigninLogs
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: signinlogs

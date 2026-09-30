@@ -1,0 +1,6 @@
+# sigma check validators. Exclusions are per rule id, each with its reason.
+validators:
+  - all
+exclusions:
+  # activity_nsg_inbound_from_internet: the escaped * is a literal asterisk (NSG any-source), deliberately not a wildcard.
+  8084d34f-b1b9-4b3d-bed0-5975ca615dee: escaped_wildcard

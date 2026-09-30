@@ -1,0 +1,1 @@
+{"type": "EXECVE", "msg": "audit(1790762400.123:4242):", "TestEventId": "neg-tcpdump", "argc": 2, "a0": "cat", "a1": "/dev/tcpdump.log"}

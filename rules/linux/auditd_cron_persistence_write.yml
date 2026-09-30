@@ -1,0 +1,32 @@
+title: Cron persistence file written
+id: d08a1661-f525-463b-aa19-6989b6877559
+status: test
+description: A file under the system or user cron locations was created or modified.
+references:
+  - https://attack.mitre.org/techniques/T1053/003/
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.003
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_type:
+    type: PATH
+    nametype:
+      - CREATE
+      - NORMAL
+  selection_path:
+    - name|startswith:
+        - '/etc/cron.d/'
+        - '/etc/cron.hourly/'
+        - '/etc/cron.daily/'
+        - '/var/spool/cron/'
+    - name: /etc/crontab
+  condition: all of selection_*
+falsepositives:
+  - Package upgrades that ship cron files; correlate with the package manager process.
+level: medium

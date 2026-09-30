@@ -1,0 +1,41 @@
+title: Successful Azure resource deletion
+id: 46742be3-049f-4e44-a780-ba5fcb52ca12
+name: azure_successful_delete
+status: test
+description: Base rule for the correlation below; not alerted on by itself.
+level: informational
+logsource:
+  product: azure
+  service: activitylogs
+detection:
+  selection:
+    operationName|endswith: /DELETE
+    status: Success
+  condition: selection
+---
+title: Mass resource deletion by one caller
+id: 765dc855-688f-48ed-bf99-71f4d1e7ae20
+status: test
+description: >-
+  Ten or more successful delete operations by the same caller within 15 minutes. Re-expression of Lab 05's
+  mass-resource-deletion detection as a Sigma correlation rule.
+references:
+  - https://attack.mitre.org/techniques/T1485/
+  - https://sigmahq.io/sigma-specification/specification/sigma-correlation-rules-specification.html
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.impact
+  - attack.t1485
+correlation:
+  type: event_count
+  rules:
+    - azure_successful_delete
+  group-by:
+    - caller
+  timespan: 15m
+  condition:
+    gte: 10
+falsepositives:
+  - Environment teardown pipelines; exclude their service principal after review.
+level: high

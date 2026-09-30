@@ -1,0 +1,29 @@
+title: Conditional Access policy created, changed or deleted
+id: 6d6d010e-81ae-416c-b84c-362b45686887
+status: test
+description: >-
+  A Microsoft Entra Conditional Access policy was added, updated or deleted. Changes can silently remove MFA.
+  Re-expression of Lab 05's conditional-access-change detection.
+references:
+  - https://attack.mitre.org/techniques/T1556/
+  - https://learn.microsoft.com/entra/identity/conditional-access/overview
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.defense-impairment
+  - attack.credential-access
+  - attack.t1556
+logsource:
+  product: azure
+  service: auditlogs
+detection:
+  selection:
+    activityDisplayName:
+      - Add conditional access policy
+      - Update conditional access policy
+      - Delete conditional access policy
+    result: success
+  condition: selection
+falsepositives:
+  - Planned identity changes; correlate with change tickets.
+level: medium

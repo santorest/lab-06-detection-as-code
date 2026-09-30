@@ -1,0 +1,1 @@
+{"type": "PATH", "msg": "audit(1790762400.123:4242):", "inode": 1311, "mode": "0100600", "TestEventId": "ak-user-create", "name": "/home/deploy/.ssh/authorized_keys", "nametype": "CREATE"}

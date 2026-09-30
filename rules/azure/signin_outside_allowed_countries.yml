@@ -1,0 +1,28 @@
+title: Successful sign-in from a country outside the allow-list
+id: d18db7f3-e50b-4962-aa30-2720052f81e4
+status: test
+description: >-
+  A successful Microsoft Entra sign-in (ResultType 0) from a country where the fictional organisation does not
+  operate (allow-list: CO, US). Re-expression of Lab 05's signin-outside-allowed-countries detection.
+references:
+  - https://attack.mitre.org/techniques/T1078/
+  - https://learn.microsoft.com/azure/azure-monitor/reference/tables/signinlogs
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.initial-access
+  - attack.t1078
+logsource:
+  product: azure
+  service: signinlogs
+detection:
+  selection:
+    ResultType: 0
+  filter_allowed:
+    Location:
+      - CO
+      - US
+  condition: selection and not filter_allowed
+falsepositives:
+  - Staff travelling or using a VPN egressing abroad; pair with impossible-travel logic.
+level: medium
