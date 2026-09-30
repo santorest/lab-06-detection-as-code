@@ -99,7 +99,39 @@ los datos son JSON anidado.
 
 ## 6. Resultados
 
-Los resultados se añaden a partir de las primeras ejecuciones de GitHub Actions (ver la tarea 13 del plan).
+Todas las cifras provienen de ejecuciones de GitHub Actions del 2026-09-30.
+
+**Ejecución de referencia en `main`** ([run 36758372626](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626),
+commit `b2357e6`): los 10 controles pasaron en la primera ejecución, en cerca de un minuto de tiempo real (los jobs
+corren en paralelo; el más lento, `match-elasticsearch`, tardó 56 s incluido el arranque del servicio).
+
+| Control | Resultado |
+|---|---|
+| `lint` | `sigma check`: 0 errores, 0 problemas; metadatos OK |
+| `convert` (4 jobs) | 0 errores en cada uno: 15 consultas Splunk, 14 Lucene, 15 ES\|QL y 7 KQL iguales a sus archivos golden |
+| `match-zircolite` | 64 archivos de eventos, 0 fallos |
+| `match-elasticsearch` | 58 archivos de eventos, 0 fallos (los 6 archivos de la regla de correlación son una omisión declarada) |
+| `python` | 76 pruebas unitarias superadas |
+| `coverage`, `secrets` | superados |
+
+Los dos positivos con mayúsculas mezcladas (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) dispararon en ambos motores,
+así que el normalizador a minúsculas del índice de Elasticsearch cumple con la coincidencia sin distinción de
+mayúsculas que exige Sigma.
+
+**Ruleset** `24264960` en `main`: pull request obligatorio, los 10 controles obligatorios y actualizados, historial
+lineal, sin force push ni borrado.
+
+**Dos pull requests de demostración, ambos bloqueados** (cerrados sin fusionar). Cada uno actualizó también los
+archivos golden, como haría un autor real, así que los conversores no tenían nada que objetar: todas las consultas
+generadas eran válidas.
+
+| PR | Cambio | Qué falló | Fusión |
+|---|---|---|---|
+| [#2](https://github.com/santorest/lab-06-detection-as-code/pull/2) | Cambio demasiado amplio: la regla de schtasks ya no exige `/create` | `match-zircolite` y `match-elasticsearch`: dispararon los negativos `neg-query` (`schtasks /query`) y `neg-delete`, 2 fallos en cada motor ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558)) | Bloqueada |
+| [#3](https://github.com/santorest/lab-06-detection-as-code/pull/3) | Error en el nombre de campo: `TargetSid` → `TargetUserSid` | Ambos jobs de coincidencia: el positivo `admin-added` dejó de coincidir, 1 fallo en cada motor ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510)) | Bloqueada |
+
+Los otros ocho controles pasaron en ambos PR. Esa es la idea: la validación y la conversión por sí solas habrían
+dejado pasar los dos cambios.
 
 ## 7. Lecciones
 
