@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-query", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /query /fo LIST"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-query", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /query /fo LIST"}
