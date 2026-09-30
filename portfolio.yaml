@@ -2,7 +2,7 @@
 slug: detection-as-code
 category: threat-detection-siem
 repo_url: https://github.com/santorest/lab-06-detection-as-code
-status: in_progress          # design | in_progress | complete — set to complete only after the owner confirms
+status: complete             # design | in_progress | complete — confirmed by the owner 2026-09-30
 difficulty: intermediate     # beginner | intermediate | advanced
 featured: true
 # The CI results are real; the sample events the rules are tested against are synthetic.
