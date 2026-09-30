@@ -1,1 +1,1 @@
-source="WinEventLog:Security" EventCode=4732 TargetSid="S-1-5-32-544"
+source="WinEventLog:Security" EventCode=4732 TargetUserSid="S-1-5-32-544"

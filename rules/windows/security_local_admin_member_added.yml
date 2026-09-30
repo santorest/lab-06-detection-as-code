@@ -19,7 +19,7 @@ logsource:
 detection:
   selection:
     EventID: 4732
-    TargetSid: S-1-5-32-544
+    TargetUserSid: S-1-5-32-544
   condition: selection
 falsepositives:
   - Provisioning and LAPS/Intune workflows that add a managed admin account; correlate with change tickets.
