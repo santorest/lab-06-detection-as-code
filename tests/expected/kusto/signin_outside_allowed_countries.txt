@@ -1,0 +1,2 @@
+SigninLogs
+| where ResultType =~ "0" and (not((Location in~ ("CO", "US"))))

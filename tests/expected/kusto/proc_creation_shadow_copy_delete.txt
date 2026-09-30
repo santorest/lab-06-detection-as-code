@@ -1,0 +1,2 @@
+DeviceProcessEvents
+| where (FolderPath endswith "\\vssadmin.exe" and (ProcessCommandLine contains "delete" and ProcessCommandLine contains "shadows")) or (FolderPath endswith "\\wmic.exe" and (ProcessCommandLine contains "shadowcopy" and ProcessCommandLine contains "delete"))

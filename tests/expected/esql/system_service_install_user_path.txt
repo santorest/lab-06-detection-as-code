@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where winlog.channel=="System" and event.code=="7045" and (winlog.event_data.ImagePath like "*\\AppData\\*" or winlog.event_data.ImagePath like "*\\Temp\\*" or winlog.event_data.ImagePath like "*\\Users\\Public\\*")

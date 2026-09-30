@@ -1,0 +1,2 @@
+AzureActivity
+| where (OperationNameValue =~ "MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/SECURITYRULES/WRITE" and ActivityStatusValue =~ "Success") and (Properties contains "\"direction\":\"Inbound\"" and Properties contains "\"access\":\"Allow\"") and (Properties contains "\"sourceAddressPrefix\":\"*\"" or Properties contains "\"sourceAddressPrefix\":\"Internet\"" or Properties contains "\"sourceAddressPrefix\":\"Any\"" or Properties contains "\"sourceAddressPrefix\":\"0.0.0.0/0\"")

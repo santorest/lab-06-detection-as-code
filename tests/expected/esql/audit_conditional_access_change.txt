@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (activityDisplayName in ("Add conditional access policy", "Update conditional access policy", "Delete conditional access policy")) and result=="success"

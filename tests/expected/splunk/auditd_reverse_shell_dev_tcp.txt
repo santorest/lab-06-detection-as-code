@@ -1,0 +1,1 @@
+type="EXECVE" a1 IN ("*/dev/tcp/*", "*/dev/udp/*") OR a2 IN ("*/dev/tcp/*", "*/dev/udp/*")

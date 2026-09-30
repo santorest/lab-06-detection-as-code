@@ -1,0 +1,1 @@
+(operationName:MICROSOFT.NETWORK\/NETWORKSECURITYGROUPS\/SECURITYRULES\/WRITE AND status:Success) AND (requestBody:*\"direction\"\:\"Inbound\"* AND requestBody:*\"access\"\:\"Allow\"*) AND (requestBody:(*\"sourceAddressPrefix\"\:\"\*\"* OR *\"sourceAddressPrefix\"\:\"Internet\"* OR *\"sourceAddressPrefix\"\:\"Any\"* OR *\"sourceAddressPrefix\"\:\"0.0.0.0\/0\"*))

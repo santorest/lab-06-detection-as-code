@@ -1,0 +1,1 @@
+type:PATH AND name:*\/.ssh\/authorized_keys AND (nametype:(CREATE OR NORMAL))

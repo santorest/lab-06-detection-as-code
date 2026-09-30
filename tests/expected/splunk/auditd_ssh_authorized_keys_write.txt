@@ -1,0 +1,1 @@
+type="PATH" name="*/.ssh/authorized_keys" nametype IN ("CREATE", "NORMAL")

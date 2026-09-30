@@ -1,0 +1,1 @@
+ResultType:0 AND (NOT (Location:(CO OR US)))

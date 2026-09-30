@@ -1,0 +1,1 @@
+operationName="MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/SECURITYRULES/WRITE" status="Success" requestBody="*\"direction\":\"Inbound\"*" requestBody="*\"access\":\"Allow\"*" requestBody IN ("*\"sourceAddressPrefix\":\"\*\"*", "*\"sourceAddressPrefix\":\"Internet\"*", "*\"sourceAddressPrefix\":\"Any\"*", "*\"sourceAddressPrefix\":\"0.0.0.0/0\"*")

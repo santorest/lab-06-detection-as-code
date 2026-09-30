@@ -1,0 +1,3 @@
+from * metadata _id, _index, _version | where ends_with(operationName, "/DELETE") and status=="Success"
+| eval timebucket=date_trunc(15minutes, @timestamp) | stats event_count=count() by timebucket, caller
+| where event_count >= 10

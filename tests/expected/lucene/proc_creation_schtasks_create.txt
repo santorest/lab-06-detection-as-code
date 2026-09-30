@@ -1,0 +1,1 @@
+process.executable.caseless:*\\schtasks.exe AND process.command_line:*\ \/create\ *

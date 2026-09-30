@@ -20,3 +20,30 @@ exclusions:
     reason: >-
       Sigma correlation rules are not supported by the pySigma lucene and kusto backends (sigma-cli 3.1.0); the
       Elasticsearch engine runs Lucene conversions, so it cannot evaluate this rule. Splunk, ES|QL and Zircolite do.
+  - rule: proc_access_lsass
+    targets: [kusto]
+    kind: unsupported
+    reason: >-
+      The kusto backend's microsoft_xdr pipeline has no Defender XDR table for Sysmon process access (event 10):
+      "Unable to determine table name from rule".
+  - rule: security_local_admin_member_added
+    targets: [kusto]
+    kind: unsupported
+    reason: >-
+      The kusto backend's microsoft_xdr pipeline has no Defender XDR table for Windows Security event 4732:
+      "Unable to determine table name from rule". A custom SecurityEvent pipeline was tried and rejected, because
+      combined with microsoft_xdr it drops the EventID condition (the query would also match 4733, member removed).
+  - rule: security_log_cleared
+    targets: [kusto]
+    kind: unsupported
+    reason: >-
+      The kusto backend's microsoft_xdr pipeline has no Defender XDR table for Windows Security event 1102:
+      "Unable to determine table name from rule". A custom SecurityEvent pipeline was tried and rejected, because
+      combined with microsoft_xdr it drops the EventID condition (the query came out empty).
+  - rule: system_service_install_user_path
+    targets: [kusto]
+    kind: unsupported
+    reason: >-
+      The kusto backend's microsoft_xdr pipeline has no Defender XDR table for Windows System event 7045:
+      "Unable to determine table name from rule". In Sentinel's Event table ImagePath exists only inside the
+      EventData XML, so there is no column to map it to.

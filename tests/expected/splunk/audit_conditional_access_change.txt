@@ -1,0 +1,1 @@
+activityDisplayName IN ("Add conditional access policy", "Update conditional access policy", "Delete conditional access policy") result="success"

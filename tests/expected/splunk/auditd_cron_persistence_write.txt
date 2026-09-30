@@ -1,0 +1,1 @@
+type="PATH" nametype IN ("CREATE", "NORMAL") name IN ("/etc/cron.d/*", "/etc/cron.hourly/*", "/etc/cron.daily/*", "/var/spool/cron/*") OR name="/etc/crontab"

@@ -1,0 +1,1 @@
+source="WinEventLog:System" EventCode=7045 ImagePath IN ("*\\AppData\\*", "*\\Temp\\*", "*\\Users\\Public\\*")

@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where winlog.channel=="Security" and event.code=="4732" and winlog.event_data.TargetSid=="S-1-5-32-544"

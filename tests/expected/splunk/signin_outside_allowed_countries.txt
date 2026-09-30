@@ -1,0 +1,1 @@
+ResultType="0" NOT (Location IN ("CO", "US"))

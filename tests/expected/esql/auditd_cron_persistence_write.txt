@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where type=="PATH" and (nametype in ("CREATE", "NORMAL")) and (starts_with(name, "/etc/cron.d/") or starts_with(name, "/etc/cron.hourly/") or starts_with(name, "/etc/cron.daily/") or starts_with(name, "/var/spool/cron/") or name=="/etc/crontab")

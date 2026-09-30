@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where ends_with(process.executable.caseless, "\\vssadmin.exe") and process.command_line like "*delete*" and process.command_line like "*shadows*" or ends_with(process.executable.caseless, "\\wmic.exe") and process.command_line like "*shadowcopy*" and process.command_line like "*delete*"

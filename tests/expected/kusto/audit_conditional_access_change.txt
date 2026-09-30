@@ -1,0 +1,2 @@
+AuditLogs
+| where (OperationName in~ ("Add conditional access policy", "Update conditional access policy", "Delete conditional access policy")) and Result =~ "success"

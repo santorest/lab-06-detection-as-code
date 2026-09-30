@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where ends_with(winlog.event_data.TargetImage, "\\lsass.exe") and (winlog.event_data.GrantedAccess in ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff")) and not (ends_with(process.executable.caseless, "\\MsMpEng.exe") or ends_with(process.executable.caseless, "\\MsSense.exe"))

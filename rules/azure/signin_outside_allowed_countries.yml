@@ -17,7 +17,7 @@ logsource:
   service: signinlogs
 detection:
   selection:
-    ResultType: 0
+    ResultType: '0'
   filter_allowed:
     Location:
       - CO

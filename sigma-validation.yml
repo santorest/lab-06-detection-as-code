@@ -4,3 +4,5 @@ validators:
 exclusions:
   # activity_nsg_inbound_from_internet: the escaped * is a literal asterisk (NSG any-source), deliberately not a wildcard.
   8084d34f-b1b9-4b3d-bed0-5975ca615dee: escaped_wildcard
+  # signin_outside_allowed_countries: SigninLogs.ResultType is a string column; a number renders as ResultType == 0 in KQL, a type error.
+  d18db7f3-e50b-4962-aa30-2720052f81e4: number_as_string

@@ -1,0 +1,1 @@
+(type:PATH AND (nametype:(CREATE OR NORMAL))) AND ((name:(\/etc\/cron.d\/* OR \/etc\/cron.hourly\/* OR \/etc\/cron.daily\/* OR \/var\/spool\/cron\/*)) OR name:\/etc\/crontab)

@@ -1,0 +1,1 @@
+(activityDisplayName:("Add conditional access policy" OR "Update conditional access policy" OR "Delete conditional access policy")) AND result:success

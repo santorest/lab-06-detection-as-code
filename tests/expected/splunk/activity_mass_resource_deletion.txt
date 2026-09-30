@@ -1,0 +1,6 @@
+operationName="*/DELETE" status="Success"
+
+| bin _time span=15m
+| stats count as event_count by _time caller
+
+| search event_count >= 10
