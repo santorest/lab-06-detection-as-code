@@ -1,0 +1,29 @@
+title: Volume shadow copies deleted
+id: 8c00c4f3-2dc8-4f01-9ca8-214a0012bf7a
+status: test
+description: vssadmin or wmic used to delete volume shadow copies, typically right before ransomware encryption.
+references:
+  - https://attack.mitre.org/techniques/T1490/
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.impact
+  - attack.t1490
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_vssadmin:
+    Image|endswith: '\vssadmin.exe'
+    CommandLine|contains|all:
+      - 'delete'
+      - 'shadows'
+  selection_wmic:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains|all:
+      - 'shadowcopy'
+      - 'delete'
+  condition: 1 of selection_*
+falsepositives:
+  - Backup software pruning old snapshots; baseline by parent process.
+level: high

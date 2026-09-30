@@ -1,0 +1,34 @@
+title: LSASS process memory opened with read access
+id: efa0f1db-1d40-4fe3-9f08-12d9af702bf6
+status: test
+description: >-
+  A process opened lsass.exe with an access mask that allows reading its memory, as credential dumpers such as
+  Mimikatz or procdump do. Known security products are filtered out.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+  - https://learn.microsoft.com/sysinternals/downloads/sysmon
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+logsource:
+  category: process_access
+  product: windows
+detection:
+  selection:
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess:
+      - '0x1010'
+      - '0x1410'
+      - '0x1438'
+      - '0x143a'
+      - '0x1fffff'
+  filter_security_tools:
+    SourceImage|endswith:
+      - '\MsMpEng.exe'
+      - '\MsSense.exe'
+  condition: selection and not filter_security_tools
+falsepositives:
+  - EDR/AV products not in the filter; add their exact SourceImage paths after baselining.
+level: high

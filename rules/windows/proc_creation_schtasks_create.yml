@@ -1,0 +1,24 @@
+title: Scheduled task created with schtasks
+id: 9f385166-e544-46ae-aa92-3879f28e3149
+status: test
+description: schtasks.exe used to create a scheduled task, a common persistence and execution mechanism.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+  - https://learn.microsoft.com/windows-server/administration/windows-commands/schtasks-create
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\schtasks.exe'
+    CommandLine|contains: ' /create '
+  condition: selection
+falsepositives:
+  - Software installers and IT scripts that register tasks; baseline by parent process and task name.
+level: low

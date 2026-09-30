@@ -10,6 +10,7 @@ from pathlib import Path
 
 from common import PLATFORMS, POLARITIES, ROOT, FixtureError, Rule, load_fixtures, load_rules, load_support
 
+# ATT&CK v19 tactics (the version sigma_check.py pins). v19 split Defense Evasion into Stealth and Defense Impairment.
 TACTICS = frozenset(
     {
         "reconnaissance",
@@ -18,7 +19,8 @@ TACTICS = frozenset(
         "execution",
         "persistence",
         "privilege-escalation",
-        "defense-evasion",
+        "stealth",
+        "defense-impairment",
         "credential-access",
         "discovery",
         "lateral-movement",

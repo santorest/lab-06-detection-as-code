@@ -1,0 +1,22 @@
+title: Security event log cleared
+id: 83364567-bbff-4922-88d3-a72518669aa8
+status: test
+description: Event 1102, the Security log was cleared. Attackers clear logs to remove evidence.
+references:
+  - https://attack.mitre.org/techniques/T1685/005/
+  - https://learn.microsoft.com/windows/security/threat-protection/auditing/event-1102
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.defense-impairment
+  - attack.t1685.005
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 1102
+  condition: selection
+falsepositives:
+  - Rare administrative log maintenance; this should be a change-managed action.
+level: high

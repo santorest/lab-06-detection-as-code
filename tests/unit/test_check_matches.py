@@ -61,6 +61,14 @@ def test_run_zircolite_nonzero_exit_is_error(tmp_path: Path):
         run_zircolite(exe, tmp_path / "r.yml", tmp_path / "e.jsonl", [], tmp_path)
 
 
+def test_run_zircolite_non_ascii_output_is_reported(tmp_path: Path):
+    """Zircolite prints UTF-8 (emoji, box drawing); decoding must not depend on the console code page."""
+    # U+2590 and U+0081 encode to bytes (0x90, 0x81) that cp1252 cannot decode, as in a real Zircolite run.
+    exe = _fake_exe(tmp_path, "import sys; sys.stdout.buffer.write('\\u2590 \\x81'.encode()); sys.exit(3)\n")
+    with pytest.raises(ZircoliteError, match="exit 3"):
+        run_zircolite(exe, tmp_path / "r.yml", tmp_path / "e.jsonl", [], tmp_path)
+
+
 def test_run_zircolite_missing_output_is_error(tmp_path: Path):
     exe = _fake_exe(tmp_path, "pass\n")
     with pytest.raises(ZircoliteError, match="no output file"):

@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "enc-pwsh-full", "Image": "C:\\Program Files\\PowerShell\\7\\pwsh.exe", "CommandLine": "pwsh.exe -EncodedCommand SQBFAFgA -NoLogo"}

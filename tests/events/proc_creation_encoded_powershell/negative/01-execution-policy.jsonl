@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-execpolicy", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Scripts\\backup.ps1"}

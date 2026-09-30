@@ -35,7 +35,9 @@ def run_zircolite(exe: Path, rule: Path, events: Path, extra: list[str], workdir
     out = workdir / "detected.json"
     out.unlink(missing_ok=True)
     cmd = [str(exe), "--events", str(events), "--ruleset", str(rule), "--jsononly", "-o", str(out), "-q", *extra]
-    proc = subprocess.run(cmd, capture_output=True, text=True, cwd=workdir, check=False)
+    proc = subprocess.run(
+        cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=workdir, check=False
+    )
     if proc.returncode != 0:
         raise ZircoliteError(f"exit {proc.returncode}: {(proc.stderr or proc.stdout)[-2000:]}")
     if not out.exists():

@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 10, "TargetImage": "C:\\Windows\\system32\\lsass.exe", "TestEventId": "neg-query-limited", "SourceImage": "C:\\Windows\\System32\\taskmgr.exe", "GrantedAccess": "0x1000"}

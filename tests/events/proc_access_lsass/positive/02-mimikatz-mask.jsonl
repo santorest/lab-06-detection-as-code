@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 10, "TargetImage": "C:\\Windows\\system32\\lsass.exe", "TestEventId": "lsass-1010", "SourceImage": "C:\\Users\\Public\\m.exe", "GrantedAccess": "0x1010"}

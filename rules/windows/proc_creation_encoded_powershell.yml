@@ -1,0 +1,34 @@
+title: PowerShell started with an encoded command
+id: 4d75cf25-efc8-4a7c-af15-8fcb159a3634
+status: test
+description: >-
+  PowerShell or pwsh launched with -EncodedCommand or one of its accepted abbreviations. Encoded commands hide the
+  script text from command-line logging and are common in initial payloads.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+  - https://learn.microsoft.com/powershell/module/microsoft.powershell.core/about/about_powershell_exe
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.execution
+  - attack.t1059.001
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_image:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+  selection_flag:
+    CommandLine|contains:
+      - ' -e '
+      - ' -en '
+      - ' -enc '
+      - ' -enco '
+      - ' -encodedcommand '
+      - ' -ec '
+  condition: all of selection_*
+falsepositives:
+  - Management agents and installers that pass encoded commands (e.g. some RMM tools); baseline by parent process.
+level: medium

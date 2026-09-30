@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 10, "TargetImage": "C:\\Windows\\system32\\lsass.exe", "TestEventId": "neg-defender", "SourceImage": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.24090.11-0\\MsMpEng.exe", "GrantedAccess": "0x1410"}

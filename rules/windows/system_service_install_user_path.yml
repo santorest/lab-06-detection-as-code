@@ -1,0 +1,28 @@
+title: Service installed from a user-writable path
+id: efb037d0-48b5-4bdc-b3f1-6f0dcdc11100
+status: test
+description: >-
+  Event 7045 (new service) whose binary lives in a user-writable folder. Legitimate services install under Program
+  Files or System32; attackers drop service binaries in temp or profile folders.
+references:
+  - https://attack.mitre.org/techniques/T1543/003/
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1543.003
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 7045
+    ImagePath|contains:
+      - '\AppData\'
+      - '\Temp\'
+      - '\Users\Public\'
+  condition: selection
+falsepositives:
+  - Per-user updaters that register services from AppData; add exact paths after baselining.
+level: high

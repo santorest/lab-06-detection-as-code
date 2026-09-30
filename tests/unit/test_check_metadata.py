@@ -37,6 +37,15 @@ def test_metadata_errors(repo: Path, old: str, new: str, message: str):
     assert any(message in e and "proc_creation_test_enc" in e for e in errors), errors
 
 
+@pytest.mark.parametrize(
+    ("tactic", "ok"), [("stealth", True), ("defense-impairment", True), ("defense-evasion", False)]
+)
+def test_tactics_follow_attack_v19(repo: Path, tactic: str, ok: bool):
+    """ATT&CK v19 split Defense Evasion into Stealth and Defense Impairment."""
+    _set_rule(repo, VALID_RULE.replace("  - attack.execution", f"  - attack.{tactic}"))
+    assert (check_repo(repo) == []) is ok
+
+
 def test_duplicate_ids_across_rules(repo: Path):
     (repo / "rules/windows/proc_creation_test_dup.yml").write_text(VALID_RULE, encoding="utf-8")
     ev = repo / "tests/events/proc_creation_test_dup"

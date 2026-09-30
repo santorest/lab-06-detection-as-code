@@ -1,0 +1,26 @@
+title: Member added to the local Administrators group
+id: 5005fcf9-8221-47ad-9f63-c37db1243477
+status: test
+description: >-
+  Event 4732 for the built-in Administrators group (S-1-5-32-544). Adding an account to local Administrators is a
+  common persistence and privilege-escalation step.
+references:
+  - https://attack.mitre.org/techniques/T1098/
+  - https://learn.microsoft.com/windows/security/threat-protection/auditing/event-4732
+author: Santiago Restrepo Sánchez
+date: 2026-09-30
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1098
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4732
+    TargetSid: S-1-5-32-544
+  condition: selection
+falsepositives:
+  - Provisioning and LAPS/Intune workflows that add a managed admin account; correlate with change tickets.
+level: medium
