@@ -1,1 +1,1 @@
-Image="*\\schtasks.exe" CommandLine="* /create *"
+Image="*\\schtasks.exe"

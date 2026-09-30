@@ -17,7 +17,6 @@ logsource:
 detection:
   selection:
     Image|endswith: '\schtasks.exe'
-    CommandLine|contains: ' /create '
   condition: selection
 falsepositives:
   - Software installers and IT scripts that register tasks; baseline by parent process and task name.

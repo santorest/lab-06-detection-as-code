@@ -1,2 +1,2 @@
 DeviceProcessEvents
-| where FolderPath endswith "\\schtasks.exe" and ProcessCommandLine contains " /create "
+| where FolderPath endswith "\\schtasks.exe"
