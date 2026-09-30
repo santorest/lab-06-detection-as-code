@@ -1,0 +1,1 @@
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 10, "TargetImage": "C:\\Windows\\system32\\lsass.exe", "TestEventId": "lsass-renamed-msmpeng", "SourceImage": "C:\\Users\\Public\\MsMpEng.exe", "GrantedAccess": "0x1410"}

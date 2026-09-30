@@ -1,2 +1,2 @@
 DeviceProcessEvents
-| where (FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe") and (ProcessCommandLine contains " -e " or ProcessCommandLine contains " -en " or ProcessCommandLine contains " -enc " or ProcessCommandLine contains " -enco " or ProcessCommandLine contains " -encodedcommand " or ProcessCommandLine contains " -ec ")
+| where (FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe") and (ProcessCommandLine contains " -e " or ProcessCommandLine contains " -en " or ProcessCommandLine contains " -enc " or ProcessCommandLine contains " -enco" or ProcessCommandLine contains " -ec ")

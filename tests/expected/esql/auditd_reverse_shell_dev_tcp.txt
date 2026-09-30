@@ -1,1 +1,1 @@
-from * metadata _id, _index, _version | where type=="EXECVE" and (a1 like "*/dev/tcp/*" or a1 like "*/dev/udp/*" or a2 like "*/dev/tcp/*" or a2 like "*/dev/udp/*")
+from * metadata _id, _index, _version | where type=="EXECVE" and (a1 like "*/dev/tcp/*" or a1 like "*/dev/udp/*" or a2 like "*/dev/tcp/*" or a2 like "*/dev/udp/*" or a3 like "*/dev/tcp/*" or a3 like "*/dev/udp/*")

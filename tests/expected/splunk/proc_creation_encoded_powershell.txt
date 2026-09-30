@@ -1,1 +1,1 @@
-Image IN ("*\\powershell.exe", "*\\pwsh.exe") CommandLine IN ("* -e *", "* -en *", "* -enc *", "* -enco *", "* -encodedcommand *", "* -ec *")
+Image IN ("*\\powershell.exe", "*\\pwsh.exe") CommandLine IN ("* -e *", "* -en *", "* -enc *", "* -enco*", "* -ec *")

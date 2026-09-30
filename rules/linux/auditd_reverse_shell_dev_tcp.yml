@@ -3,7 +3,8 @@ id: 507cd01b-fb21-459a-8c13-fbb1d1770be1
 status: test
 description: >-
   A command line that redirects a shell to the bash /dev/tcp or /dev/udp pseudo-devices, the classic one-line
-  reverse shell.
+  reverse shell. Needs decoded EXECVE arguments: raw auditd hex-encodes any argument containing a space, so the
+  collector must interpret the record first (ausearch -i, laurel or auditbeat).
 references:
   - https://attack.mitre.org/techniques/T1059/004/
 author: Santiago Restrepo Sánchez
@@ -22,6 +23,9 @@ detection:
         - '/dev/tcp/'
         - '/dev/udp/'
     - a2|contains:
+        - '/dev/tcp/'
+        - '/dev/udp/'
+    - a3|contains:  # bash -l -c '...'
         - '/dev/tcp/'
         - '/dev/udp/'
   condition: all of selection_*
