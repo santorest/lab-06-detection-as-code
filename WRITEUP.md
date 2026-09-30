@@ -25,7 +25,7 @@ bundle: "Published on the portfolio site with its SHA-256 checksum"
 | **Role played** | Detection engineer turning a handful of SIEM searches into a reviewed, tested rule repository |
 | **Environment** | Public GitHub repository, GitHub-hosted Ubuntu runners, Elasticsearch 9.5.3 service container |
 | **Tools** | Sigma, sigma-cli 3.1.0 / pySigma 1.5.1, Zircolite 4.1.0, Elasticsearch, Python, pytest, gitleaks |
-| **Deliverable** | 15 rules, 64 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, demo PRs, results |
+| **Deliverable** | 15 rules, 64 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, 2 demo PRs, results |
 
 ---
 
@@ -95,7 +95,37 @@ nested JSON.
 
 ## 6. Results
 
-Results are added from the first GitHub Actions runs (see Task 13 of the plan).
+All numbers below come from GitHub Actions runs on 2026-09-30.
+
+**Baseline run on `main`** ([run 36758372626](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626),
+commit `b2357e6`): all 10 checks passed on the first run, in about one minute wall-clock (jobs run in parallel;
+the slowest, `match-elasticsearch`, took 56 s including the service start).
+
+| Check | Result |
+|---|---|
+| `lint` | `sigma check`: 0 errors, 0 issues; metadata OK |
+| `convert` (4 jobs) | 0 errors each: 15 Splunk, 14 Lucene, 15 ES\|QL and 7 KQL queries equal their golden files |
+| `match-zircolite` | 64 fixture files, 0 failures |
+| `match-elasticsearch` | 58 fixture files, 0 failures (the correlation rule's 6 files are a declared skip) |
+| `python` | 76 unit tests passed |
+| `coverage`, `secrets` | passed |
+
+Both mixed-case positives (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) fired on both engines, so the lowercase
+normalizer on the Elasticsearch index does what Sigma's case-insensitive matching needs.
+
+**Ruleset** `24264960` on `main`: pull request required, all 10 checks required and up to date, linear history, no
+force pushes or deletion.
+
+**Two demo pull requests, both blocked** (closed unmerged). Each one also refreshed the golden files, as a real
+author would, so the converters had nothing to object to: every generated query was valid.
+
+| PR | Change | What failed | Merge |
+|---|---|---|---|
+| [#2](https://github.com/santorest/lab-06-detection-as-code/pull/2) | Over-broad edit: the schtasks rule no longer requires `/create` | `match-zircolite` and `match-elasticsearch`: negatives `neg-query` (`schtasks /query`) and `neg-delete` fired, 2 failures on each engine ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558)) | Blocked |
+| [#3](https://github.com/santorest/lab-06-detection-as-code/pull/3) | Field-name typo: `TargetSid` → `TargetUserSid` | Both match jobs: positive `admin-added` no longer matched, 1 failure on each engine ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510)) | Blocked |
+
+The other eight checks passed on both PRs. That is the point: lint and conversion alone would have let both changes
+through.
 
 ## 7. Lessons
 
