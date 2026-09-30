@@ -21,8 +21,8 @@ summary:
     (Zircolite and Elasticsearch) before a ruleset lets the change merge.
   es: >-
     Quince reglas Sigma mapeadas a ATT&CK para Windows, Linux y Azure. Cada pull request las valida, las convierte a
-    consultas de Splunk, Elastic y Sentinel y las ejecuta contra eventos de prueba positivos y negativos en dos
-    motores (Zircolite y Elasticsearch) antes de que un ruleset permita fusionar el cambio.
+    consultas de Splunk, Elastic y Sentinel y las ejecuta contra eventos positivos y negativos en dos motores
+    (Zircolite y Elasticsearch) antes de que un ruleset permita fusionar el cambio.
 tools: [Sigma, sigma-cli, pySigma, Zircolite, Elasticsearch, Splunk SPL, ES|QL, KQL, Microsoft Sentinel, Sysmon, auditd,
         GitHub Actions, Python, pytest]
 mitre_attack: [T1003.001, T1053.003, T1053.005, T1059.001, T1059.004, T1078, T1098, T1098.004, T1485, T1490, T1543.003,
