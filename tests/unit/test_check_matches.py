@@ -86,3 +86,14 @@ def test_stale_output_file_is_not_reused(tmp_path: Path):
     exe = _fake_exe(tmp_path, "pass\n")
     with pytest.raises(ZircoliteError, match="no output file"):
         run_zircolite(exe, tmp_path / "r.yml", tmp_path / "e.jsonl", [], tmp_path)
+
+
+def test_matched_ids_counts_a_match_without_test_event_id():
+    """An alert that cannot be traced to a fixture event must not read as 'no matches' (a negative would pass)."""
+    results = [{"title": "r", "matches": [{"row_id": 1}]}]
+    assert matched_ids(results) == {"<unidentified match of r>"}
+
+
+def test_matched_ids_counts_a_correlation_alert_without_evidence():
+    results = [{"title": "c", "matches": [{"result_type": "correlation", "alert_id": "a1", "evidence": []}]}]
+    assert matched_ids(results) == {"<unidentified match of c>"}
