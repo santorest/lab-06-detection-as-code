@@ -57,6 +57,21 @@ These came up while building the lab (2026-09-30, sigma-cli 3.1.0 / pySigma 1.5.
   source. A negative fixture (`VirtualNetwork` source) caught it; the asterisk is now escaped.
 - ATT&CK v19 split Defense Evasion into Stealth and Defense Impairment and renumbered techniques (Clear Windows
   Event Logs T1070.001 → T1685.005, Cloud Firewall T1562.007 → T1686.001).
+- The final review found three rule gaps the fixtures did not cover (PowerShell `-Encoded` and other prefixes, a
+  dumper renamed `MsMpEng.exe` outside Defender's folder, `bash -l -c` with the payload in `a3`); each now has a
+  positive fixture.
+
+## Case sensitivity per target
+
+Sigma values match case-insensitively. What each target does:
+
+| Target | Behaviour | Source |
+|---|---|---|
+| Zircolite 4.1.0 | Case-insensitive for `contains`/`endswith` and for exact matches | Tested: fixtures `PowerShell.EXE -ENC`, `SCHTASKS /CREATE`, and `UPDATE Conditional Access Policy` / `SUCCESS` all fire |
+| Elasticsearch engine (this repo) | Case-insensitive, because the test index lowercase-normalises every string | Tested in CI on the same fixtures |
+| Lucene / ES\|QL goldens on ECS | `process.executable.caseless` is safe; `process.command_line` wildcards and ES\|QL `like` / `==` are case-sensitive | Elastic's documentation; the goldens are not executed |
+| Sentinel KQL goldens | `=~`, `in~`, `contains`, `endswith` are case-insensitive | Read from the generated queries |
+| Splunk goldens | Field-value matching is case-insensitive | Splunk's documentation; not executed |
 
 ## Pins that are bumped by hand
 

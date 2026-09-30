@@ -53,5 +53,6 @@ fails on an undeclared conversion failure and on an `unsupported` entry that has
   group management (4732) and the audit-log-cleared event (1102); the System log (7045).
 - **Linux auditd:** `-a always,exit -F arch=b64 -S execve -k exec`, `-w /root/.ssh -p wa -k ssh_keys`,
   `-w /home -p wa -k home_writes`, `-w /etc/cron.d -p wa -k cron`, `-w /etc/crontab -p wa -k cron`,
-  `-w /var/spool/cron -p wa -k cron`.
+  `-w /var/spool/cron -p wa -k cron`. The collector must decode the records (`ausearch -i`, laurel or auditbeat):
+  raw auditd hex-encodes any EXECVE argument that contains a space, and the rules match decoded text.
 - **Azure:** Activity log, Entra audit logs and sign-in logs exported to the SIEM (see Lab 05's landing zone).

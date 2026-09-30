@@ -106,6 +106,11 @@ Declared in [`support.yaml`](support.yaml); CI re-checks every `unsupported` ent
   backend is part of this pipeline).
 - Splunk and ES|QL correlation queries use fixed 15-minute buckets; Zircolite uses a sliding window (see
   [docs/pipeline.md](docs/pipeline.md)).
+- The Elasticsearch engine runs a raw-field Lucene conversion on a test index whose strings are lowercase-normalised.
+  The ECS-mapped Lucene and ES|QL goldens are not executed; on a standard ECS index their `process.command_line`
+  wildcards and ES|QL `like` / `==` are case-sensitive, so a mixed-case command line could slip past them.
+- The auditd rules assume decoded records (`ausearch -i`, laurel or auditbeat): raw auditd hex-encodes EXECVE
+  arguments that contain spaces.
 
 ## License
 

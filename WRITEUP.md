@@ -25,7 +25,7 @@ bundle: "Published on the portfolio site with its SHA-256 checksum"
 | **Role played** | Detection engineer turning a handful of SIEM searches into a reviewed, tested rule repository |
 | **Environment** | Public GitHub repository, GitHub-hosted Ubuntu runners, Elasticsearch 9.5.3 service container |
 | **Tools** | Sigma, sigma-cli 3.1.0 / pySigma 1.5.1, Zircolite 4.1.0, Elasticsearch, Python, pytest, gitleaks |
-| **Deliverable** | 15 rules, 64 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, 2 demo PRs, results |
+| **Deliverable** | 15 rules, 68 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, 2 demo PRs, results |
 
 ---
 
@@ -69,7 +69,8 @@ Tags follow ATT&CK v19.
 - **match-zircolite** and **match-elasticsearch**: every fixture file is run through two engines. Positive files
   must fire on every event (on the correlation rule, at least one alert), negative files are near misses that must
   stay silent. Two engines because a query can be right in one and wrong in another: Elasticsearch keyword fields
-  are case-sensitive unless normalised, while Sigma is case-insensitive.
+  are case-sensitive unless normalised, while Sigma is case-insensitive. The Elasticsearch engine runs a raw-field
+  Lucene conversion (not the ECS-mapped golden) on a test index whose strings are lowercase-normalised.
 - **coverage** keeps the README ATT&CK table and a Navigator layer in sync with the rule tags; **python** tests the
   scripts; **secrets** runs gitleaks over the full history.
 
@@ -110,8 +111,10 @@ the slowest, `match-elasticsearch`, took 56 s including the service start).
 | `python` | 76 unit tests passed |
 | `coverage`, `secrets` | passed |
 
-Both mixed-case positives (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) fired on both engines, so the lowercase
-normalizer on the Elasticsearch index does what Sigma's case-insensitive matching needs.
+Both mixed-case positives (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) fired on both engines. On the Elasticsearch
+side that holds for this repo's test index, where every string is lowercase-normalised. It says nothing about the
+committed ECS goldens: they are not executed, and on a standard ECS index their `process.command_line` wildcards
+and ES|QL `like` / `==` comparisons are case-sensitive (per Elastic's documentation; not tested here).
 
 **Ruleset** `24264960` on `main`: pull request required, all 10 checks required and up to date, linear history, no
 force pushes or deletion.
@@ -146,6 +149,10 @@ through.
   buckets would split 5 + 5.
 - **Engines have quirks.** Zircolite strips underscores from field names, and a correlation rule only converts
   when it is in the same file as its base rule.
+- **A second reader finds the variants you didn't write down.** The final review found three gaps the fixtures did
+  not cover: PowerShell accepts every prefix of `-EncodedCommand` (`-Encoded` slipped through), a dumper renamed
+  `MsMpEng.exe` outside Defender's folder bypassed the LSASS filter, and `bash -l -c` puts the payload in `a3`.
+  Each became a positive fixture that failed first, then passed once the rule was fixed.
 
 ## 8. Limits
 
@@ -153,7 +160,10 @@ through.
   not measure false-positive rates on real telemetry, which needs a baseline in a live environment.
 - No Wazuh conversion (out of scope, on the roadmap).
 - Elasticsearch is exercised only in CI (Docker service); Zircolite runs locally too.
-- Splunk, ES|QL and KQL queries are generated and diffed, not executed.
+- What Elasticsearch executes is a raw-field Lucene conversion on a lowercase-normalised test index. The ECS-mapped
+  Lucene and ES|QL goldens, Splunk and KQL are generated and diffed, not executed.
+- The auditd rules assume decoded records: raw auditd hex-encodes EXECVE arguments that contain spaces, so the
+  collector must interpret them first (`ausearch -i`, laurel or auditbeat).
 
 ## 9. Reproduce it
 
