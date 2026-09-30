@@ -1,0 +1,80 @@
+{
+  "name": "Lab 06 detection-as-code coverage",
+  "domain": "enterprise-attack",
+  "versions": {
+    "layer": "4.5"
+  },
+  "description": "Techniques covered by the Sigma rules in this repository (generated).",
+  "techniques": [
+    {
+      "techniqueID": "T1003.001",
+      "score": 1,
+      "comment": "LSASS process memory opened with read access"
+    },
+    {
+      "techniqueID": "T1053.003",
+      "score": 1,
+      "comment": "Cron persistence file written"
+    },
+    {
+      "techniqueID": "T1053.005",
+      "score": 1,
+      "comment": "Scheduled task created with schtasks"
+    },
+    {
+      "techniqueID": "T1059.001",
+      "score": 1,
+      "comment": "PowerShell started with an encoded command"
+    },
+    {
+      "techniqueID": "T1059.004",
+      "score": 1,
+      "comment": "Reverse shell through /dev/tcp or /dev/udp"
+    },
+    {
+      "techniqueID": "T1078",
+      "score": 1,
+      "comment": "Successful sign-in from a country outside the allow-list"
+    },
+    {
+      "techniqueID": "T1098",
+      "score": 1,
+      "comment": "Member added to the local Administrators group; Owner or User Access Administrator role assigned"
+    },
+    {
+      "techniqueID": "T1098.004",
+      "score": 1,
+      "comment": "SSH authorized_keys file created or modified"
+    },
+    {
+      "techniqueID": "T1485",
+      "score": 1,
+      "comment": "Mass resource deletion by one caller"
+    },
+    {
+      "techniqueID": "T1490",
+      "score": 1,
+      "comment": "Volume shadow copies deleted"
+    },
+    {
+      "techniqueID": "T1543.003",
+      "score": 1,
+      "comment": "Service installed from a user-writable path"
+    },
+    {
+      "techniqueID": "T1556",
+      "score": 1,
+      "comment": "Conditional Access policy created, changed or deleted"
+    },
+    {
+      "techniqueID": "T1685.005",
+      "score": 1,
+      "comment": "Security event log cleared"
+    },
+    {
+      "techniqueID": "T1686.001",
+      "score": 1,
+      "comment": "NSG rule allows inbound traffic from the Internet"
+    }
+  ]
+}
