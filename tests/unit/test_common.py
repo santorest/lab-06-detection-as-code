@@ -104,3 +104,11 @@ def test_judge_correlation_positive_needs_one_alert(tmp_path: Path):
     fx = _fx(tmp_path, "positive", ["a", "b", "c"])
     assert judge("r", fx, {"a"}, correlation=True) == []
     assert judge("r", fx, set(), correlation=True) == ["r: positive/positive.jsonl: no correlation alert"]
+
+
+def test_read_jsonl_rejects_control_characters(tmp_path: Path):
+    r"""A lost backslash (CORP\alice written as CORP<BEL>lice) must not slip into fixtures unnoticed."""
+    p = tmp_path / "bel.jsonl"
+    p.write_text(r'{"TestEventId": "a", "User": "CORP\u0007lice"}' + "\n", encoding="utf-8")
+    with pytest.raises(FixtureError, match=r":1: control character in field User"):
+        read_jsonl(p)
