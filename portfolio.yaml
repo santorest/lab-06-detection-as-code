@@ -1,0 +1,33 @@
+# Metadata used by the portfolio site's `import_lab` command (site repo). Not needed to run the lab.
+slug: detection-as-code
+category: threat-detection-siem
+repo_url: https://github.com/santorest/lab-06-detection-as-code
+status: in_progress          # design | in_progress | complete — set to complete only after the owner confirms
+difficulty: intermediate     # beginner | intermediate | advanced
+featured: true
+# The CI results are real; the sample events the rules are tested against are synthetic.
+sample_output_notice: true
+cover: diagrams/pipeline.png
+writeup:
+  en: WRITEUP.md
+  es: WRITEUP.es.md
+title:
+  en: "Detection-as-Code with Sigma"
+  es: "Detección como código con Sigma"
+summary:
+  en: >-
+    Fifteen ATT&CK-mapped Sigma rules for Windows, Linux and Azure. Every pull request lints them, converts them to
+    Splunk, Elastic and Sentinel queries, and runs them against positive and negative sample events on two engines
+    (Zircolite and Elasticsearch) before a ruleset lets the change merge.
+  es: >-
+    Quince reglas Sigma mapeadas a ATT&CK para Windows, Linux y Azure. Cada pull request las valida, las convierte a
+    consultas de Splunk, Elastic y Sentinel y las ejecuta contra eventos de prueba positivos y negativos en dos
+    motores (Zircolite y Elasticsearch) antes de que un ruleset permita fusionar el cambio.
+tools: [Sigma, sigma-cli, pySigma, Zircolite, Elasticsearch, Splunk SPL, ES|QL, KQL, Microsoft Sentinel, Sysmon, auditd,
+        GitHub Actions, Python, pytest]
+mitre_attack: [T1003.001, T1053.003, T1053.005, T1059.001, T1059.004, T1078, T1098, T1098.004, T1485, T1490, T1543.003,
+               T1556, T1685.005, T1686.001]
+bundle:
+  title:
+    en: Lab source bundle
+    es: Paquete de fuentes del laboratorio

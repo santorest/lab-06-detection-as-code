@@ -1,0 +1,12 @@
+flowchart LR
+  PR["Pull request<br/>Sigma rules + positive/negative JSONL events"]
+  PR --> L["lint<br/>sigma check · yamllint · metadata"]
+  PR --> C["convert x4<br/>Splunk · Lucene · ES#124;QL · Sentinel KQL<br/>vs golden files"]
+  PR --> Z["match-zircolite<br/>SQLite engine"]
+  PR --> E["match-elasticsearch<br/>ES 9.5 service"]
+  PR --> V["coverage<br/>ATT&CK table current"]
+  PR --> P["python<br/>ruff · pytest"]
+  PR --> S["secrets<br/>gitleaks"]
+  L & C & Z & E & V & P & S --> G{"ruleset:<br/>all 10 checks"}
+  G -->|pass| M["merge to main"]
+  G -->|fail| X["PR blocked"]

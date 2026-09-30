@@ -1,5 +1,64 @@
 # Lab 06 — Detection-as-code with Sigma
 
+Fifteen ATT&CK-mapped [Sigma](https://sigmahq.io/) rules for Windows endpoints, Linux (auditd) and Azure, kept in Git
+and tested like code. On every pull request, GitHub Actions lints the rules, converts them to Splunk SPL, Elastic
+Lucene, ES|QL and Microsoft Sentinel KQL (compared against committed "golden" outputs), and **runs them** against
+positive and negative sample events on two engines: [Zircolite](https://github.com/wagga40/Zircolite) (SQLite) and
+Elasticsearch. A branch ruleset only lets a change merge when every check passes.
+
+Status: completed. The CI results are real (see [WRITEUP.md](WRITEUP.md)); the sample events the rules are tested
+against are synthetic, hand-written from documented log schemas.
+
+## Layout
+
+| Path | What it is |
+|---|---|
+| `rules/{windows,linux,azure}/` | Sigma rules, one per file; the filename is the rule's slug |
+| `tests/events/<slug>/{positive,negative}/` | Synthetic JSONL events that must / must not fire ([README](tests/events/README.md)) |
+| `tests/expected/<backend>/` | Golden conversions: `splunk`, `lucene`, `esql`, `kusto` |
+| `targets.yaml` | sigma-cli / Zircolite arguments per platform |
+| `support.yaml` | Declared gaps: rule × backend/engine pairs that cannot be converted or run, with the reason |
+| `pipelines/azure_sentinel.yml` | Custom pySigma pipeline: this repo's Azure fields → Sentinel tables and columns |
+| `sigma-validation.yml` | `sigma check` validator settings (per-rule exclusions, each with its reason) |
+| `scripts/` | `sigma_check.py`, `check_metadata.py`, `convert.py`, `check_matches.py`, `es_matches.py`, `attack_coverage.py`, `get_zircolite.py` |
+| `coverage/attack-navigator.json` | Generated ATT&CK Navigator layer |
+| `docs/` | [Rule authoring](docs/rule-authoring.md) and [pipeline](docs/pipeline.md) guides |
+
+## Run it locally
+
+Windows or Linux, Python 3.12:
+
+```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r requirements-dev.txt     # Linux: .venv/bin/python
+.venv/Scripts/python scripts/sigma_check.py --fail-on-issues -c sigma-validation.yml rules/
+.venv/Scripts/python scripts/check_metadata.py
+.venv/Scripts/python scripts/convert.py            # --update rewrites the golden files
+.venv/Scripts/python scripts/get_zircolite.py      # pinned binary, SHA-256 verified, into .tools/
+.venv/Scripts/python scripts/check_matches.py      # Zircolite engine
+.venv/Scripts/python scripts/attack_coverage.py --check
+.venv/Scripts/python -m pytest
+```
+
+The Elasticsearch engine needs a local cluster, otherwise it runs only in CI:
+
+```bash
+docker run -d -p 9200:9200 -e discovery.type=single-node -e xpack.security.enabled=false elasticsearch:9.5.3
+.venv/Scripts/python scripts/es_matches.py --wait 180
+```
+
+## CI jobs
+
+| Job | Does | Fails when |
+|---|---|---|
+| `lint` | `sigma check` (ATT&CK 19.2 pinned), yamllint, `check_metadata.py` | Sigma errors or issues; missing ATT&CK tag, description, false-positive notes or level; bad or duplicate id; missing positive or negative events |
+| `convert` (splunk, lucene, esql, kusto) | `sigma convert` and a diff against `tests/expected/<backend>/` | Conversion error, golden mismatch, or a stale `support.yaml` entry |
+| `match-zircolite` | Every fixture file through the pinned Zircolite binary | A positive does not fire or a negative fires |
+| `match-elasticsearch` | Elasticsearch 9.5.3 service; each fixture file indexed, Lucene query run | Same, on a second engine |
+| `coverage` | `attack_coverage.py --check` | The table below or the Navigator layer is out of date |
+| `python` | ruff and pytest for the scripts | Lint or unit-test failure |
+| `secrets` | gitleaks over the full history | Any finding |
+
 ## ATT&CK coverage
 
 <!-- coverage:start -->
@@ -22,3 +81,32 @@
 | [T1685.005](https://attack.mitre.org/techniques/T1685/005/) | Defense Impairment | Security event log cleared | kusto |
 | [T1686.001](https://attack.mitre.org/techniques/T1686/001/) | Defense Impairment | NSG rule allows inbound traffic from the Internet | — |
 <!-- coverage:end -->
+
+Tags follow ATT&CK v19, which split Defense Evasion into Stealth and Defense Impairment and renumbered some
+techniques (for example Clear Windows Event Logs is now T1685.005).
+
+## Known gaps
+
+Declared in [`support.yaml`](support.yaml); CI re-checks every `unsupported` entry and fails once it starts working.
+
+| Rule | Not available on | Why |
+|---|---|---|
+| `activity_mass_resource_deletion` | lucene, kusto, elasticsearch | Correlation rules are not supported by the pySigma lucene and kusto backends; the Elasticsearch engine runs Lucene queries |
+| `proc_access_lsass` | kusto | No Defender XDR table for Sysmon process access in the `microsoft_xdr` pipeline |
+| `security_local_admin_member_added` | kusto | No Defender XDR table for Security event 4732; a SecurityEvent pipeline was tried and dropped the EventID condition |
+| `security_log_cleared` | kusto | No Defender XDR table for Security event 1102; same SecurityEvent problem |
+| `system_service_install_user_path` | kusto | No Defender XDR table for System event 7045; `ImagePath` exists only inside XML in Sentinel's Event table |
+| `auditd_*` (3 rules) | kusto | Sentinel has no standard table for raw auditd records |
+
+## Limits
+
+- The sample events are synthetic. Passing tests show the rules do what they claim on those events, not what their
+  false-positive rate would be in a real environment.
+- There is no Wazuh conversion. It was left out of scope and is on the roadmap (Wazuh rules are XML, and no Wazuh
+  backend is part of this pipeline).
+- Splunk and ES|QL correlation queries use fixed 15-minute buckets; Zircolite uses a sliding window (see
+  [docs/pipeline.md](docs/pipeline.md)).
+
+## License
+
+[MIT](LICENSE)
