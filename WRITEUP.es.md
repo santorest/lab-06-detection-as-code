@@ -27,7 +27,7 @@ bundle: "Publicado en el sitio del portafolio con su checksum SHA-256"
 | **Rol** | Ingeniero de detección que convierte un puñado de búsquedas de SIEM en un repositorio de reglas revisado y probado |
 | **Entorno** | Repositorio público de GitHub, runners Ubuntu de GitHub, contenedor de servicio Elasticsearch 9.5.3 |
 | **Herramientas** | Sigma, sigma-cli 3.1.0 / pySigma 1.5.1, Zircolite 4.1.0, Elasticsearch, Python, pytest, gitleaks |
-| **Entregables** | 15 reglas, 64 archivos de eventos, conversiones golden, 7 jobs de CI (10 controles), ruleset, PR de demostración, resultados |
+| **Entregables** | 15 reglas, 68 archivos de eventos, conversiones golden, 7 jobs de CI (10 controles), ruleset, 2 PR de demostración, resultados |
 
 ---
 
@@ -72,7 +72,9 @@ Las cinco reglas de Azure vuelven a expresar en Sigma las detecciones KQL escrit
 - **match-zircolite** y **match-elasticsearch:** cada archivo de eventos pasa por dos motores. Los positivos deben
   disparar en todos sus eventos (en la regla de correlación, al menos una alerta) y los negativos, casi aciertos,
   deben quedar en silencio. Son dos motores porque una consulta puede estar bien en uno y mal en otro: los campos
-  keyword de Elasticsearch distinguen mayúsculas si no se normalizan, mientras que Sigma no las distingue.
+  keyword de Elasticsearch distinguen mayúsculas si no se normalizan, mientras que Sigma no las distingue. El motor
+  Elasticsearch ejecuta una conversión Lucene con los nombres de campo originales (no la golden mapeada a ECS) sobre
+  un índice de prueba cuyas cadenas se normalizan a minúsculas.
 - **coverage** mantiene la tabla ATT&CK del README y una capa de Navigator sincronizadas con las etiquetas;
   **python** prueba los scripts; **secrets** ejecuta gitleaks sobre todo el historial.
 
@@ -114,9 +116,11 @@ corren en paralelo; el más lento, `match-elasticsearch`, tardó 56 s incluido e
 | `python` | 76 pruebas unitarias superadas |
 | `coverage`, `secrets` | superados |
 
-Los dos positivos con mayúsculas mezcladas (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) dispararon en ambos motores,
-así que el normalizador a minúsculas del índice de Elasticsearch cumple con la coincidencia sin distinción de
-mayúsculas que exige Sigma.
+Los dos positivos con mayúsculas mezcladas (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) dispararon en ambos motores.
+Del lado de Elasticsearch eso vale para el índice de prueba de este repositorio, donde cada cadena se normaliza a
+minúsculas. No dice nada de las golden ECS versionadas: no se ejecutan, y en un índice ECS estándar sus comodines
+sobre `process.command_line` y las comparaciones `like` / `==` de ES|QL distinguen mayúsculas (según la
+documentación de Elastic; no se probó aquí).
 
 **Ruleset** `24264960` en `main`: pull request obligatorio, los 10 controles obligatorios y actualizados, historial
 lineal, sin force push ni borrado.
@@ -154,6 +158,10 @@ dejado pasar los dos cambios.
   consultas, los intervalos fijos partirían en 5 + 5.
 - **Los motores tienen sus manías.** Zircolite elimina los guiones bajos de los nombres de campo, y una regla de
   correlación solo se convierte si está en el mismo archivo que su regla base.
+- **Un segundo lector encuentra las variantes que no escribiste.** La revisión final encontró tres huecos que los
+  eventos no cubrían: PowerShell acepta cualquier prefijo de `-EncodedCommand` (`-Encoded` se escapaba), un volcador
+  renombrado `MsMpEng.exe` fuera de la carpeta de Defender evadía el filtro de LSASS, y `bash -l -c` deja la carga en
+  `a3`. Cada uno se convirtió en un evento positivo que falló primero y pasó al corregir la regla.
 
 ## 8. Límites
 
@@ -162,7 +170,11 @@ dejado pasar los dos cambios.
   en vivo.
 - Sin conversión a Wazuh (fuera de alcance, en la hoja de ruta).
 - Elasticsearch solo se ejercita en CI (servicio Docker); Zircolite también se ejecuta en local.
-- Las consultas de Splunk, ES|QL y KQL se generan y se comparan, pero no se ejecutan.
+- Lo que ejecuta Elasticsearch es una conversión Lucene con los nombres de campo originales sobre un índice de prueba
+  normalizado a minúsculas. Las golden Lucene y ES|QL mapeadas a ECS, Splunk y KQL se generan y se comparan, pero no
+  se ejecutan.
+- Las reglas de auditd suponen registros decodificados: auditd sin procesar codifica en hexadecimal los argumentos de
+  EXECVE que contienen espacios, así que el colector debe interpretarlos antes (`ausearch -i`, laurel o auditbeat).
 
 ## 9. Cómo reproducirlo
 

@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "task-create-upper", "Image": "C:\\WINDOWS\\SYSTEM32\\SCHTASKS.EXE", "CommandLine": "SCHTASKS /CREATE /TN X /TR calc.exe /SC DAILY"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "task-create-upper", "Image": "C:\\WINDOWS\\SYSTEM32\\SCHTASKS.EXE", "CommandLine": "SCHTASKS /CREATE /TN X /TR calc.exe /SC DAILY"}

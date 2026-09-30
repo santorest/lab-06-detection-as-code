@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "enc-mixed-case", "Image": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE", "CommandLine": "PowerShell.EXE -W Hidden -ENC SQBFAFgA"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "enc-mixed-case", "Image": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE", "CommandLine": "PowerShell.EXE -W Hidden -ENC SQBFAFgA"}

@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-wmic-list", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy list brief"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-wmic-list", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy list brief"}

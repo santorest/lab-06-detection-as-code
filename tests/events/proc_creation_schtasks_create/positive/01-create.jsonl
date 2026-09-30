@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "task-create", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /create /tn Updater /tr C:\\Users\\Public\\u.exe /sc onlogon"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "task-create", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /create /tn Updater /tr C:\\Users\\Public\\u.exe /sc onlogon"}

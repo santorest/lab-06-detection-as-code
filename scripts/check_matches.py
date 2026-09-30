@@ -17,17 +17,20 @@ class ZircoliteError(RuntimeError):
 
 
 def matched_ids(results: list[dict]) -> set[str]:
+    """TestEventIds behind every alert. An alert that names no fixture event still counts, as a placeholder id,
+    so a negative can never pass on output this function could not read."""
     ids: set[str] = set()
     for rule in results:
         for match in rule.get("matches") or []:
             if match.get("result_type") == "correlation":
-                ids.update(
+                found = {
                     e["event"]["TestEventId"]
                     for e in match.get("evidence") or []
                     if "TestEventId" in (e.get("event") or {})
-                )
-            elif "TestEventId" in match:
-                ids.add(match["TestEventId"])
+                }
+            else:
+                found = {match["TestEventId"]} if "TestEventId" in match else set()
+            ids |= found or {f"<unidentified match of {rule.get('title')}>"}
     return ids
 
 

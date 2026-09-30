@@ -71,6 +71,9 @@ def read_jsonl(path: Path) -> list[dict]:
             raise FixtureError(f"{path}:{n}: event is not a JSON object")
         if not isinstance(event.get("TestEventId"), str) or not event["TestEventId"]:
             raise FixtureError(f"{path}:{n}: missing TestEventId")
+        for field, value in event.items():
+            if isinstance(value, str) and any(ord(c) < 0x20 for c in value):
+                raise FixtureError(f"{path}:{n}: control character in field {field} (lost backslash?)")
         events.append(event)
     if not events:
         raise FixtureError(f"{path}: no events")

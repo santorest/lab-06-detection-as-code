@@ -1,1 +1,1 @@
-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-list", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe list shadows"}
+{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-list", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe list shadows"}

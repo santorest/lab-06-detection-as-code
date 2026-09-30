@@ -1,1 +1,1 @@
-type:EXECVE AND ((a1:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a2:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)))
+type:EXECVE AND ((a1:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a2:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a3:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)))

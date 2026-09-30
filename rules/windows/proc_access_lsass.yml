@@ -24,11 +24,13 @@ detection:
       - '0x1438'
       - '0x143a'
       - '0x1fffff'
-  filter_security_tools:
-    SourceImage|endswith:
-      - '\MsMpEng.exe'
-      - '\MsSense.exe'
-  condition: selection and not filter_security_tools
+  # Filter on the install paths, not the file names: a dumper renamed MsMpEng.exe elsewhere must still fire.
+  filter_defender:
+    SourceImage|startswith: 'C:\ProgramData\Microsoft\Windows Defender\Platform\'
+    SourceImage|endswith: '\MsMpEng.exe'
+  filter_mde:
+    SourceImage: 'C:\Program Files\Windows Defender Advanced Threat Protection\MsSense.exe'
+  condition: selection and not 1 of filter_*
 falsepositives:
   - EDR/AV products not in the filter; add their exact SourceImage paths after baselining.
 level: high

