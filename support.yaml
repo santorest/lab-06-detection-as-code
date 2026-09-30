@@ -1,0 +1,16 @@
+# Declared gaps. kind: unsupported  -> the tool rejects the rule; CI re-runs it and fails if it now works (stale).
+#                kind: not-applicable -> no meaningful target exists; CI skips it.
+# targets: splunk | lucene | esql | kusto | zircolite | elasticsearch
+exclusions:
+  - rule: auditd_reverse_shell_dev_tcp
+    targets: [kusto]
+    kind: not-applicable
+    reason: Microsoft Sentinel has no standard table for raw auditd EXECVE/PATH records; the query would have no table.
+  - rule: auditd_ssh_authorized_keys_write
+    targets: [kusto]
+    kind: not-applicable
+    reason: Microsoft Sentinel has no standard table for raw auditd EXECVE/PATH records; the query would have no table.
+  - rule: auditd_cron_persistence_write
+    targets: [kusto]
+    kind: not-applicable
+    reason: Microsoft Sentinel has no standard table for raw auditd EXECVE/PATH records; the query would have no table.

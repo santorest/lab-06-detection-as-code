@@ -1,0 +1,26 @@
+# Arguments per rule platform.
+#   convert.<backend>: sigma-cli args for the golden conversions in tests/expected/ (realistic field mappings).
+#   zircolite / es_lucene: args for the two match engines, which see the raw field names used by the fixtures.
+windows:
+  convert:
+    splunk: [-p, splunk_windows]
+    lucene: [-p, ecs_windows]
+    esql: [-p, ecs_windows, --disable-pipeline-check]
+    kusto: [-p, microsoft_xdr]
+  zircolite: [--pipeline, sysmon, --pipeline, windows-logsources]
+  es_lucene: [-p, sysmon, -p, windows-logsources, --disable-pipeline-check]
+linux:
+  convert:
+    splunk: [--without-pipeline]
+    lucene: [--without-pipeline]
+    esql: [--without-pipeline]
+  zircolite: []
+  es_lucene: [--without-pipeline]
+azure:
+  convert:
+    splunk: [--without-pipeline]
+    lucene: [--without-pipeline]
+    esql: [--without-pipeline]
+    kusto: [-p, azure_monitor, -p, pipelines/azure_sentinel.yml]
+  zircolite: [--timefield, time]
+  es_lucene: [--without-pipeline]
