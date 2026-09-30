@@ -130,6 +130,11 @@ author would, so the converters had nothing to object to: every generated query 
 The other eight checks passed on both PRs. That is the point: lint and conversion alone would have let both changes
 through.
 
+**After the final-review fixes** ([PR #5](https://github.com/santorest/lab-06-detection-as-code/pull/5),
+[run 36767918569](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569)): all 10 checks
+passed; Zircolite 68 fixture files and Elasticsearch 62, 0 failures on each; 79 unit tests. The four new fixtures
+cover the review's findings (section 7).
+
 ## 7. Lessons
 
 - **The negative fixtures earned their place first.** The NSG rule as first written matched every source: a bare

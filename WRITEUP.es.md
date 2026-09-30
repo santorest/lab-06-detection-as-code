@@ -137,6 +137,11 @@ generadas eran válidas.
 Los otros ocho controles pasaron en ambos PR. Esa es la idea: la validación y la conversión por sí solas habrían
 dejado pasar los dos cambios.
 
+**Tras las correcciones de la revisión final** ([PR #5](https://github.com/santorest/lab-06-detection-as-code/pull/5),
+[run 36767918569](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569)): los 10 controles
+pasaron; Zircolite 68 archivos de eventos y Elasticsearch 62, 0 fallos en cada uno; 79 pruebas unitarias. Los cuatro
+eventos nuevos cubren los hallazgos de la revisión (sección 7).
+
 ## 7. Lecciones
 
 - **Los eventos negativos fueron los primeros en demostrar su valor.** La regla de NSG, tal como se escribió
