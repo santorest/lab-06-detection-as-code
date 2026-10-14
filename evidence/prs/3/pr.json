@@ -1,0 +1,137 @@
+{
+  "baseRefName": "main",
+  "body": "Demo for the write-up, not meant to merge: a field-name typo (`TargetSid` → `TargetUserSid`) with refreshed golden conversions. Every converter still produces a valid query, so only the event tests can notice. Expected: match-zircolite and match-elasticsearch fail because the positive event `admin-added` no longer matches.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "closedAt": "2026-09-30T18:32:07Z",
+  "commits": [
+    {
+      "authoredDate": "2026-09-30T18:29:46Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T18:29:46Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "demo: rename the SID field in the admin-group rule",
+      "oid": "4bed75a6834d6f0beee186a3103e53cac659549f"
+    }
+  ],
+  "createdAt": "2026-09-30T18:29:49Z",
+  "headRefName": "demo/field-typo-admin-group",
+  "mergedAt": null,
+  "number": 3,
+  "state": "CLOSED",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:09Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409740",
+      "name": "lint",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:13Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409728",
+      "name": "convert (splunk)",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:09Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036410126",
+      "name": "convert (lucene)",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:16Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409649",
+      "name": "convert (esql)",
+      "startedAt": "2026-09-30T18:29:57Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:10Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409965",
+      "name": "convert (kusto)",
+      "startedAt": "2026-09-30T18:29:57Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:33Z",
+      "conclusion": "FAILURE",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409933",
+      "name": "match-zircolite",
+      "startedAt": "2026-09-30T18:29:57Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:53Z",
+      "conclusion": "FAILURE",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409789",
+      "name": "match-elasticsearch",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:04Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409459",
+      "name": "coverage",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:08Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036409775",
+      "name": "python",
+      "startedAt": "2026-09-30T18:29:56Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:02Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510/job/110036410008",
+      "name": "secrets",
+      "startedAt": "2026-09-30T18:29:57Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    }
+  ],
+  "title": "Demo: field-name typo (expected to be blocked)",
+  "url": "https://github.com/santorest/lab-06-detection-as-code/pull/3"
+}

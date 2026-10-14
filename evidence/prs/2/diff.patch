@@ -1,0 +1,41 @@
+diff --git a/rules/windows/proc_creation_schtasks_create.yml b/rules/windows/proc_creation_schtasks_create.yml
+index 0c3ed49..4aa7539 100644
+--- a/rules/windows/proc_creation_schtasks_create.yml
++++ b/rules/windows/proc_creation_schtasks_create.yml
+@@ -17,7 +17,6 @@ logsource:
+ detection:
+   selection:
+     Image|endswith: '\schtasks.exe'
+-    CommandLine|contains: ' /create '
+   condition: selection
+ falsepositives:
+   - Software installers and IT scripts that register tasks; baseline by parent process and task name.
+diff --git a/tests/expected/esql/proc_creation_schtasks_create.txt b/tests/expected/esql/proc_creation_schtasks_create.txt
+index b4810ad..e246832 100644
+--- a/tests/expected/esql/proc_creation_schtasks_create.txt
++++ b/tests/expected/esql/proc_creation_schtasks_create.txt
+@@ -1 +1 @@
+-from * metadata _id, _index, _version | where ends_with(process.executable.caseless, "\\schtasks.exe") and process.command_line like "* /create *"
++from * metadata _id, _index, _version | where ends_with(process.executable.caseless, "\\schtasks.exe")
+diff --git a/tests/expected/kusto/proc_creation_schtasks_create.txt b/tests/expected/kusto/proc_creation_schtasks_create.txt
+index 2d2acb7..4afd693 100644
+--- a/tests/expected/kusto/proc_creation_schtasks_create.txt
++++ b/tests/expected/kusto/proc_creation_schtasks_create.txt
+@@ -1,2 +1,2 @@
+ DeviceProcessEvents
+-| where FolderPath endswith "\\schtasks.exe" and ProcessCommandLine contains " /create "
++| where FolderPath endswith "\\schtasks.exe"
+diff --git a/tests/expected/lucene/proc_creation_schtasks_create.txt b/tests/expected/lucene/proc_creation_schtasks_create.txt
+index d6b1e30..5a20fdf 100644
+--- a/tests/expected/lucene/proc_creation_schtasks_create.txt
++++ b/tests/expected/lucene/proc_creation_schtasks_create.txt
+@@ -1 +1 @@
+-process.executable.caseless:*\\schtasks.exe AND process.command_line:*\ \/create\ *
++process.executable.caseless:*\\schtasks.exe
+diff --git a/tests/expected/splunk/proc_creation_schtasks_create.txt b/tests/expected/splunk/proc_creation_schtasks_create.txt
+index 3f9991f..13bf49a 100644
+--- a/tests/expected/splunk/proc_creation_schtasks_create.txt
++++ b/tests/expected/splunk/proc_creation_schtasks_create.txt
+@@ -1 +1 @@
+-Image="*\\schtasks.exe" CommandLine="* /create *"
++Image="*\\schtasks.exe"

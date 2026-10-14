@@ -1,0 +1,34 @@
+diff --git a/rules/windows/security_local_admin_member_added.yml b/rules/windows/security_local_admin_member_added.yml
+index 0d608d3..888bbdb 100644
+--- a/rules/windows/security_local_admin_member_added.yml
++++ b/rules/windows/security_local_admin_member_added.yml
+@@ -19,7 +19,7 @@ logsource:
+ detection:
+   selection:
+     EventID: 4732
+-    TargetSid: S-1-5-32-544
++    TargetUserSid: S-1-5-32-544
+   condition: selection
+ falsepositives:
+   - Provisioning and LAPS/Intune workflows that add a managed admin account; correlate with change tickets.
+diff --git a/tests/expected/esql/security_local_admin_member_added.txt b/tests/expected/esql/security_local_admin_member_added.txt
+index f03ed8a..565fa07 100644
+--- a/tests/expected/esql/security_local_admin_member_added.txt
++++ b/tests/expected/esql/security_local_admin_member_added.txt
+@@ -1 +1 @@
+-from * metadata _id, _index, _version | where winlog.channel=="Security" and event.code=="4732" and winlog.event_data.TargetSid=="S-1-5-32-544"
++from * metadata _id, _index, _version | where winlog.channel=="Security" and event.code=="4732" and winlog.event_data.TargetUserSid=="S-1-5-32-544"
+diff --git a/tests/expected/lucene/security_local_admin_member_added.txt b/tests/expected/lucene/security_local_admin_member_added.txt
+index d2c8a35..e2d64c3 100644
+--- a/tests/expected/lucene/security_local_admin_member_added.txt
++++ b/tests/expected/lucene/security_local_admin_member_added.txt
+@@ -1 +1 @@
+-winlog.channel:Security AND (event.code:4732 AND winlog.event_data.TargetSid:S\-1\-5\-32\-544)
++winlog.channel:Security AND (event.code:4732 AND winlog.event_data.TargetUserSid:S\-1\-5\-32\-544)
+diff --git a/tests/expected/splunk/security_local_admin_member_added.txt b/tests/expected/splunk/security_local_admin_member_added.txt
+index 73e5d71..509be29 100644
+--- a/tests/expected/splunk/security_local_admin_member_added.txt
++++ b/tests/expected/splunk/security_local_admin_member_added.txt
+@@ -1 +1 @@
+-source="WinEventLog:Security" EventCode=4732 TargetSid="S-1-5-32-544"
++source="WinEventLog:Security" EventCode=4732 TargetUserSid="S-1-5-32-544"

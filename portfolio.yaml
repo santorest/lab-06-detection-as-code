@@ -1,7 +1,6 @@
 # Metadata used by the portfolio site's `import_lab` command (site repo). Not needed to run the lab.
 slug: detection-as-code
 category: threat-detection-siem
-repo_url: https://github.com/santorest/lab-06-detection-as-code
 status: complete             # design | in_progress | complete — confirmed by the owner 2026-09-30
 difficulty: intermediate     # beginner | intermediate | advanced
 featured: true

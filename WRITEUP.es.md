@@ -8,7 +8,6 @@ date: "2026-09-30"
 time_to_reproduce: "30–60 minutos (fork, activar Actions, aplicar el ruleset)"
 skills: [Sigma, sigma-cli, pySigma, Zircolite, Elasticsearch, Splunk SPL, ES|QL, KQL, Microsoft Sentinel, Sysmon, auditd, GitHub Actions, Python, pytest]
 frameworks: [MITRE ATT&CK v19, especificación Sigma, NIST CSF 2.0 (DE.CM, DE.AE)]
-repo: "https://github.com/santorest/lab-06-detection-as-code"
 bundle: "Publicado en el sitio del portafolio con su checksum SHA-256"
 ---
 
@@ -103,7 +102,7 @@ los datos son JSON anidado.
 
 Todas las cifras provienen de ejecuciones de GitHub Actions del 2026-09-30.
 
-**Ejecución de referencia en `main`** ([run 36758372626](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626),
+**Ejecución de referencia en `main`** (run 36758372626 (2026-09-30, archivada en `evidence/runs/36758372626/`),
 commit `b2357e6`): los 10 controles pasaron en la primera ejecución, en cerca de un minuto de tiempo real (los jobs
 corren en paralelo; el más lento, `match-elasticsearch`, tardó 56 s incluido el arranque del servicio).
 
@@ -131,14 +130,14 @@ generadas eran válidas.
 
 | PR | Cambio | Qué falló | Fusión |
 |---|---|---|---|
-| [#2](https://github.com/santorest/lab-06-detection-as-code/pull/2) | Cambio demasiado amplio: la regla de schtasks ya no exige `/create` | `match-zircolite` y `match-elasticsearch`: dispararon los negativos `neg-query` (`schtasks /query`) y `neg-delete`, 2 fallos en cada motor ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558)) | Bloqueada |
-| [#3](https://github.com/santorest/lab-06-detection-as-code/pull/3) | Error en el nombre de campo: `TargetSid` → `TargetUserSid` | Ambos jobs de coincidencia: el positivo `admin-added` dejó de coincidir, 1 fallo en cada motor ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510)) | Bloqueada |
+| #2 (archivado en `evidence/prs/2/`) | Cambio demasiado amplio: la regla de schtasks ya no exige `/create` | `match-zircolite` y `match-elasticsearch`: dispararon los negativos `neg-query` (`schtasks /query`) y `neg-delete`, 2 fallos en cada motor (run 36759000558, 2026-09-30, archivada en `evidence/runs/36759000558/`) | Bloqueada |
+| #3 (archivado en `evidence/prs/3/`) | Error en el nombre de campo: `TargetSid` → `TargetUserSid` | Ambos jobs de coincidencia: el positivo `admin-added` dejó de coincidir, 1 fallo en cada motor (run 36758992510, 2026-09-30, archivada en `evidence/runs/36758992510/`) | Bloqueada |
 
 Los otros ocho controles pasaron en ambos PR. Esa es la idea: la validación y la conversión por sí solas habrían
 dejado pasar los dos cambios.
 
-**Tras las correcciones de la revisión final** ([PR #5](https://github.com/santorest/lab-06-detection-as-code/pull/5),
-[run 36767918569](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569)): los 10 controles
+**Tras las correcciones de la revisión final** (PR #5 (archivado en `evidence/prs/5/`),
+run 36767918569 (2026-09-30, archivada en `evidence/runs/36767918569/`)): los 10 controles
 pasaron; Zircolite 68 archivos de eventos y Elasticsearch 62, 0 fallos en cada uno; 79 pruebas unitarias. Los cuatro
 eventos nuevos cubren los hallazgos de la revisión (sección 7).
 

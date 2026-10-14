@@ -3,7 +3,7 @@
 Fifteen ATT&CK-mapped [Sigma](https://sigmahq.io/) rules for Windows endpoints, Linux (auditd) and Azure, kept in Git
 and tested like code. On every pull request, GitHub Actions lints the rules, converts them to Splunk SPL, Elastic
 Lucene, ES|QL and Microsoft Sentinel KQL (compared against committed "golden" outputs), and **runs them** against
-positive and negative sample events on two engines: [Zircolite](https://github.com/wagga40/Zircolite) (SQLite) and
+positive and negative sample events on two engines: Zircolite (`github.com/wagga40/Zircolite`) (SQLite) and
 Elasticsearch. A branch ruleset only lets a change merge when every check passes.
 
 Status: completed. The CI results are real (see [WRITEUP.md](WRITEUP.md)); the sample events the rules are tested
