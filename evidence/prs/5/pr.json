@@ -1,0 +1,242 @@
+{
+  "baseRefName": "main",
+  "body": "Fixes from the final review:\n\n- An alert with no TestEventId now counts as a match, so a negative can't pass on output the judge couldn't read (unit tests).\n- Rejects control characters in fixtures; repaired the corrupted User field (CORP\\alice) in 14 Sysmon fixtures.\n- Rule gaps, each pinned by a positive fixture that failed first: every -EncodedCommand prefix (-Encoded), the LSASS filter now uses install paths (a renamed MsMpEng.exe fires), and auditd EXECVE also checks a3 (bash -l -c).\n- A case-variant positive for the Conditional Access rule (exact-match case-insensitivity on both engines).\n- Docs: what the Elasticsearch engine does and doesn't prove, case semantics per target, auditd decoding assumption.\n- portfolio.yaml status: complete (owner confirmed).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "closedAt": "2026-09-30T19:47:32Z",
+  "commits": [
+    {
+      "authoredDate": "2026-09-30T19:29:22Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:29:22Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "fix: an alert without a TestEventId counts as a match",
+      "oid": "8f3a483c63f367d88eef607c68e0c0cb41d89918"
+    },
+    {
+      "authoredDate": "2026-09-30T19:30:43Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:30:43Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "fix: reject control characters in fixtures; repair the User field",
+      "oid": "0c1ab958a447642d6a660da7f4eb49e0b2e8756b"
+    },
+    {
+      "authoredDate": "2026-09-30T19:33:39Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:33:39Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "fix: repair the User field in the Sysmon fixtures (CORP\\alice)",
+      "oid": "26c269451c679a81adc75aa6a15103138adff7e6"
+    },
+    {
+      "authoredDate": "2026-09-30T19:40:15Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:40:15Z",
+      "messageBody": "…er paths, auditd a3)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "fix: close rule gaps found in review (PowerShell prefixes, LSASS filt…",
+      "oid": "748aef1087b6930c385176ddeadebf2530ae860b"
+    },
+    {
+      "authoredDate": "2026-09-30T19:45:22Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:45:22Z",
+      "messageBody": "…rget, auditd decoding\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "docs: say what the Elasticsearch engine proves, case semantics per ta…",
+      "oid": "2825758674ba4ecb0d93baf050a82a9cf2ade1d2"
+    },
+    {
+      "authoredDate": "2026-09-30T19:45:41Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T19:45:41Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "chore: mark the lab complete (owner confirmed)",
+      "oid": "a5c4c68f0b4f7c6ac66f74d872c74cd329f12b0d"
+    }
+  ],
+  "createdAt": "2026-09-30T19:45:44Z",
+  "headRefName": "fix/final-review",
+  "mergedAt": "2026-09-30T19:47:32Z",
+  "number": 5,
+  "state": "MERGED",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:04Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648251",
+      "name": "lint",
+      "startedAt": "2026-09-30T19:45:51Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648073",
+      "name": "convert (splunk)",
+      "startedAt": "2026-09-30T19:45:51Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648107",
+      "name": "convert (lucene)",
+      "startedAt": "2026-09-30T19:45:51Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:11Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648060",
+      "name": "convert (esql)",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:07Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648395",
+      "name": "convert (kusto)",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:35Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648212",
+      "name": "match-zircolite",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:52Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648065",
+      "name": "match-elasticsearch",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:00Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066647997",
+      "name": "coverage",
+      "startedAt": "2026-09-30T19:45:51Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:04Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066648070",
+      "name": "python",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T19:46:01Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569/job/110066647982",
+      "name": "secrets",
+      "startedAt": "2026-09-30T19:45:52Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    }
+  ],
+  "title": "Final review fixes",
+  "url": "https://github.com/santorest/lab-06-detection-as-code/pull/5"
+}

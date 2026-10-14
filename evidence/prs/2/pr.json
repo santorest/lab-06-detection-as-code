@@ -1,0 +1,137 @@
+{
+  "baseRefName": "main",
+  "body": "Demo for the write-up, not meant to merge: an over-broad edit. The schtasks rule no longer requires `/create`, and the golden conversions are refreshed as a real author would. Expected: match-zircolite and match-elasticsearch fail because the negative events (`schtasks /query`, `schtasks /delete`) now fire; everything else passes.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "closedAt": "2026-09-30T18:32:04Z",
+  "commits": [
+    {
+      "authoredDate": "2026-09-30T18:28:10Z",
+      "authors": [
+        {
+          "email": "37381624+santorest@users.noreply.github.com",
+          "id": "MDQ6VXNlcjM3MzgxNjI0",
+          "login": "santorest",
+          "name": "Santiago Restrepo Sánchez"
+        },
+        {
+          "email": "noreply@anthropic.com",
+          "id": "MDQ6VXNlcjgxODQ3",
+          "login": "claude",
+          "name": "Claude Opus 5.5"
+        }
+      ],
+      "committedDate": "2026-09-30T18:28:10Z",
+      "messageBody": "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>",
+      "messageHeadline": "demo: widen the schtasks rule to every schtasks.exe run",
+      "oid": "68cc128bdb9eacc5144c77ecb6b3982defb2de2e"
+    }
+  ],
+  "createdAt": "2026-09-30T18:28:14Z",
+  "headRefName": "demo/too-broad-schtasks",
+  "mergedAt": null,
+  "number": 2,
+  "state": "CLOSED",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:12Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436767",
+      "name": "lint",
+      "startedAt": "2026-09-30T18:30:00Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:21Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436800",
+      "name": "convert (splunk)",
+      "startedAt": "2026-09-30T18:30:02Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:17Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036437062",
+      "name": "convert (lucene)",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:19Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036437060",
+      "name": "convert (esql)",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:15Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436981",
+      "name": "convert (kusto)",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:46Z",
+      "conclusion": "FAILURE",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036437028",
+      "name": "match-zircolite",
+      "startedAt": "2026-09-30T18:30:00Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:31:01Z",
+      "conclusion": "FAILURE",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436347",
+      "name": "match-elasticsearch",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:11Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436664",
+      "name": "coverage",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:13Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436722",
+      "name": "python",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    },
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-09-30T18:30:06Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558/job/110036436980",
+      "name": "secrets",
+      "startedAt": "2026-09-30T18:30:01Z",
+      "status": "COMPLETED",
+      "workflowName": "ci"
+    }
+  ],
+  "title": "Demo: over-broad rule edit (expected to be blocked)",
+  "url": "https://github.com/santorest/lab-06-detection-as-code/pull/2"
+}

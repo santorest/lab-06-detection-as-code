@@ -8,7 +8,6 @@ date: "2026-09-30"
 time_to_reproduce: "30–60 minutes (fork, enable Actions, apply the ruleset)"
 skills: [Sigma, sigma-cli, pySigma, Zircolite, Elasticsearch, Splunk SPL, ES|QL, KQL, Microsoft Sentinel, Sysmon, auditd, GitHub Actions, Python, pytest]
 frameworks: [MITRE ATT&CK v19, Sigma specification, NIST CSF 2.0 (DE.CM, DE.AE)]
-repo: "https://github.com/santorest/lab-06-detection-as-code"
 bundle: "Published on the portfolio site with its SHA-256 checksum"
 ---
 
@@ -98,7 +97,7 @@ nested JSON.
 
 All numbers below come from GitHub Actions runs on 2026-09-30.
 
-**Baseline run on `main`** ([run 36758372626](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758372626),
+**Baseline run on `main`** (run 36758372626 (2026-09-30, archived in `evidence/runs/36758372626/`),
 commit `b2357e6`): all 10 checks passed on the first run, in about one minute wall-clock (jobs run in parallel;
 the slowest, `match-elasticsearch`, took 56 s including the service start).
 
@@ -124,14 +123,14 @@ author would, so the converters had nothing to object to: every generated query 
 
 | PR | Change | What failed | Merge |
 |---|---|---|---|
-| [#2](https://github.com/santorest/lab-06-detection-as-code/pull/2) | Over-broad edit: the schtasks rule no longer requires `/create` | `match-zircolite` and `match-elasticsearch`: negatives `neg-query` (`schtasks /query`) and `neg-delete` fired, 2 failures on each engine ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36759000558)) | Blocked |
-| [#3](https://github.com/santorest/lab-06-detection-as-code/pull/3) | Field-name typo: `TargetSid` → `TargetUserSid` | Both match jobs: positive `admin-added` no longer matched, 1 failure on each engine ([run](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36758992510)) | Blocked |
+| #2 (archived in `evidence/prs/2/`) | Over-broad edit: the schtasks rule no longer requires `/create` | `match-zircolite` and `match-elasticsearch`: negatives `neg-query` (`schtasks /query`) and `neg-delete` fired, 2 failures on each engine (run 36759000558, 2026-09-30, archived in `evidence/runs/36759000558/`) | Blocked |
+| #3 (archived in `evidence/prs/3/`) | Field-name typo: `TargetSid` → `TargetUserSid` | Both match jobs: positive `admin-added` no longer matched, 1 failure on each engine (run 36758992510, 2026-09-30, archived in `evidence/runs/36758992510/`) | Blocked |
 
 The other eight checks passed on both PRs. That is the point: lint and conversion alone would have let both changes
 through.
 
-**After the final-review fixes** ([PR #5](https://github.com/santorest/lab-06-detection-as-code/pull/5),
-[run 36767918569](https://github.com/santorest/lab-06-detection-as-code/actions/runs/36767918569)): all 10 checks
+**After the final-review fixes** (PR #5 (archived in `evidence/prs/5/`),
+run 36767918569 (2026-09-30, archived in `evidence/runs/36767918569/`)): all 10 checks
 passed; Zircolite 68 fixture files and Elasticsearch 62, 0 failures on each; 79 unit tests. The four new fixtures
 cover the review's findings (section 7).
 
