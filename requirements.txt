@@ -5,4 +5,4 @@ pySigma-backend-elasticsearch==2.1.1
 pySigma-backend-kusto==1.0.1
 pysigma-pipeline-sysmon==2.0.0
 pysigma-pipeline-windows==2.0.1
-PyYAML==6.0.3
+PyYAML==6.0.4
